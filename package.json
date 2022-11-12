@@ -1,0 +1,22 @@
+{
+	"name": "countr",
+	"version": "1.0.0",
+	"description": "countr",
+	"main": "./src/js/main.js",
+	"scripts": {
+		"clean": "rimraf dist",
+		"start": "parcel serve src/index.html --open",
+		"build": "npm run clean && parcel build --public-url ./ --no-source-maps"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@parcel/transformer-sass": "^2.7.0",
+		"jquery": "^3.6.1",
+		"parcel": "^2.7.0",
+		"rimraf": "^3.0.2",
+		"sass": "^1.54.9",
+		"slick-carousel": "^1.8.1"
+	}
+}
