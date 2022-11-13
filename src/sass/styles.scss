@@ -1,5 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Open+Sans:ital,wght@0,700;1,400&family=Raleway:wght@500&family=Roboto+Condensed:ital,wght@1,300;1,400;1,700&display=swap');
 
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
 @mixin Roberto-700 {
 	font-family: Roboto Condensed;
 	font-weight: 700;
@@ -17,12 +22,13 @@
 @mixin styleForms {
 	margin: 30px 0px;
 	width: 30%;
+	padding-bottom: 70px;
 	min-height: 600px;
 	border-radius: 10px;
 	border: none;
 	display: flex;
 	flex-direction: column;
-	justify-content: space-between;
+	position: relative;
 	background: linear-gradient(to right, rgb(224, 224, 228), rgb(246, 200, 236));
 }
 
@@ -53,6 +59,7 @@ body {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
+
 		@media (max-width: 824px) {
 			min-height: 100px;
 		}
@@ -60,6 +67,7 @@ body {
 		.logo {
 			@include Roberto-700();
 			margin-left: 100px;
+
 			@media (max-width: 824px) {
 				font-size: 35px;
 				margin-left: 50px;
@@ -72,6 +80,7 @@ body {
 			border-radius: 15px;
 			padding: 15px;
 			background: rgb(245, 226, 250);
+
 			@media (max-width: 824px) {
 				font-size: 30px;
 				margin-left: 50px;
@@ -84,6 +93,7 @@ body {
 		margin: 0 auto;
 		display: flex;
 		justify-content: space-between;
+
 		@media (max-width: 824px) {
 			flex-direction: column;
 		}
@@ -92,6 +102,7 @@ body {
 		.prorgessForms,
 		.doneForms {
 			@include styleForms();
+
 			@media (max-width: 824px) {
 				width: 100%;
 			}
@@ -100,9 +111,11 @@ body {
 			.addButton,
 			.prorgessBtn,
 			.doneBtn,
-			.deleteAll{
+			.deleteAll {
 				@include styleBtn();
+				cursor: pointer;
 				background: linear-gradient(to right, rgb(183, 244, 205), rgb(51, 113, 105));
+
 				@media (max-width: 824px) {
 					font-size: 25px;
 				}
@@ -116,11 +129,68 @@ body {
 			.deleteAll {
 				background: linear-gradient(to right, rgb(212, 221, 245), rgb(125, 119, 163));
 			}
+
+			.addButton,
+			.deleteAll {
+				position: absolute;
+				bottom: 0;
+				margin-top: 10px;
+			}
 		}
-		
+
 		.prorgessForms {
 			border-radius: 10px 10px 40px 40px;
 		}
 	}
 }
 
+.todoCardContainer {
+	margin: 20px;
+	background-color: rgba(53, 204, 204, 0.767);
+	position: relative;
+	padding: 20px;
+	border-radius: 15px;
+
+	.todoCardEditButton {
+		position: absolute;
+		right: 100;
+		top: 5;
+	}
+
+	.todoCardDeleteButton {
+		position: absolute;
+		right: 5;
+		top: 5;
+	}
+
+	.todoCardSlideButton {
+		position: absolute;
+		right: 5;
+		top: 35;
+		height: 100px;
+	}
+
+	input {
+		border-radius: 5px;
+		border: 0px solid;
+		cursor: pointer;
+	}
+
+	.todoCardHeaderTitle {
+		margin-bottom: 10px;
+		@include Roberto-400()
+	}
+
+	.todoCardDescriptionText {
+		@include Roberto-400();
+		font-size: 20px;
+		margin-bottom: 50px;
+	}
+
+	.todoCardFooter {
+		display: flex;
+		justify-content: space-between;
+		@include Roberto-400();
+		font-size: 20px;
+	}
+}
