@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Open+Sans:ital,wght@0,700;1,400&family=Raleway:wght@500&family=Roboto+Condensed:ital,wght@1,300;1,400;1,700&display=swap');
+
+@mixin Roberto-700 {
+	font-family: Roboto Condensed;
+	font-weight: 700;
+	font-size: 45px;
+	font-style: normal;
+}
+
+@mixin Roberto-400 {
+	font-family: Roboto Condensed;
+	font-weight: 400;
+	font-size: 35px;
+	font-style: normal;
+}
+
+@mixin styleForms {
+	margin: 30px 0px;
+	width: 30%;
+	min-height: 600px;
+	border-radius: 10px;
+	border: none;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	background: linear-gradient(to right, rgb(224, 224, 228), rgb(246, 200, 236));
+}
+
+@mixin styleBtn {
+	@include Roberto-400();
+	width: 100%;
+	height: 75px;
+	border-radius: 10px;
+	border: none;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.container {
+	width: 100%;
+	padding-top: 30px;
+	background: linear-gradient(to right, rgb(96, 96, 177), rgb(245, 91, 212));
+
+	.header {
+		width: 95%;
+		min-height: 130px;
+		margin: auto;
+		border-radius: 15px;
+		background: linear-gradient(to right, rgb(191, 191, 218), rgb(244, 152, 224));
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		@media (max-width: 824px) {
+			min-height: 100px;
+		}
+
+		.logo {
+			@include Roberto-700();
+			margin-left: 100px;
+			@media (max-width: 824px) {
+				font-size: 35px;
+				margin-left: 50px;
+			}
+		}
+
+		.clock {
+			@include Roberto-700();
+			margin-right: 100px;
+			border-radius: 15px;
+			padding: 15px;
+			background: rgb(245, 226, 250);
+			@media (max-width: 824px) {
+				font-size: 30px;
+				margin-left: 50px;
+			}
+		}
+	}
+
+	.content {
+		width: 90%;
+		margin: 0 auto;
+		display: flex;
+		justify-content: space-between;
+		@media (max-width: 824px) {
+			flex-direction: column;
+		}
+
+		.todoForms,
+		.prorgessForms,
+		.doneForms {
+			@include styleForms();
+			@media (max-width: 824px) {
+				width: 100%;
+			}
+
+			.todo,
+			.addButton,
+			.prorgessBtn,
+			.doneBtn,
+			.deleteAll{
+				@include styleBtn();
+				background: linear-gradient(to right, rgb(183, 244, 205), rgb(51, 113, 105));
+				@media (max-width: 824px) {
+					font-size: 25px;
+				}
+			}
+
+			.prorgessBtn {
+				background: linear-gradient(to right, rgb(241, 223, 243), rgb(151, 145, 151));
+			}
+
+			.doneBtn,
+			.deleteAll {
+				background: linear-gradient(to right, rgb(212, 221, 245), rgb(125, 119, 163));
+			}
+		}
+		
+		.prorgessForms {
+			border-radius: 10px 10px 40px 40px;
+		}
+	}
+}
+
