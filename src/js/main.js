@@ -42,10 +42,100 @@ todo.className = 'todo'
 todo.innerHTML = 'TODO:'// + счетчик форм
 todoForms.appendChild(todo)
 
+
+//Array
+
+const todoCardsArray = []
+const dataCardsArray = []
+console.log(todoCardsArray)
+
+
+//TodoCard elements
+function generateTodo() {
+
+	const todoCardContainer = document.createElement('div')
+	todoCardContainer.className = 'todoCardContainer'
+	todoForms.appendChild(todoCardContainer)
+
+	const todoCardEditButton = document.createElement('input')
+	todoCardEditButton.className = 'todoCardEditButton'
+	todoCardEditButton.type = 'button'
+	todoCardEditButton.value = 'edit'
+	todoCardContainer.appendChild(todoCardEditButton)
+
+	const todoCardDeleteButton = document.createElement('input')
+	todoCardDeleteButton.className = 'todoCardDeleteButton'
+	todoCardDeleteButton.type = 'button'
+	todoCardDeleteButton.value = 'delete'
+	todoCardContainer.appendChild(todoCardDeleteButton)
+
+	const todoCardSlideButton = document.createElement('input')
+	todoCardSlideButton.className = 'todoCardSlideButton'
+	todoCardSlideButton.type = 'button'
+	todoCardSlideButton.value = '>'
+	todoCardContainer.appendChild(todoCardSlideButton)
+
+	const todoCardHeader = document.createElement('div')
+	todoCardHeader.className = 'todoCardHeader'
+	todoCardContainer.appendChild(todoCardHeader)
+
+	const todoCardHeaderTitle = document.createElement('p')
+	todoCardHeaderTitle.className = 'todoCardHeaderTitle'
+	todoCardHeaderTitle.innerHTML = 'Title' // = .value in future
+	todoCardHeader.appendChild(todoCardHeaderTitle)
+
+
+
+	const todoCardDescription = document.createElement('div')
+	todoCardDescription.className = 'todoCardDescription'
+	todoCardContainer.appendChild(todoCardDescription)
+
+	const todoCardDescriptionText = document.createElement('p')
+	todoCardDescriptionText.className = 'todoCardDescriptionText'
+	todoCardDescriptionText.innerHTML = 'Description' // = .value in future
+	todoCardDescription.appendChild(todoCardDescriptionText)
+
+	const todoCardFooter = document.createElement('div')
+	todoCardFooter.className = 'todoCardFooter'
+	todoCardContainer.appendChild(todoCardFooter)
+
+	const todoCardFooterUser = document.createElement('p')
+	todoCardFooterUser.className = 'todocardFooterUser'
+	todoCardFooterUser.innerHTML = 'User' // = ...value in future
+	todoCardFooter.appendChild(todoCardFooterUser)
+
+	const todoCardFooterTime = document.createElement('div')
+	todoCardFooterTime.className = 'todocardFooterTime'
+	todoCardFooterTime.innerHTML = new Date().toLocaleTimeString()
+	todoCardFooter.appendChild(todoCardFooterTime)
+
+	todoCardsArray.push(todoCardContainer)
+	console.log(todoCardsArray)
+	//TodoCard elements
+}
+
+//Delete Card
+
+window.addEventListener('click', function (e) {
+
+	if (e.target.classList.contains('todoCardDeleteButton')) {
+		//Delete element
+		let cardToDelete = e.target.parentNode
+		let index = todoCardsArray.indexOf(cardToDelete)
+		cardToDelete.remove()
+		todoCardsArray.splice(index, 1)
+	}
+})
+
+//Delete Card
+
+
 const addButton = document.createElement('button')
 addButton.className = 'addButton'
 addButton.innerHTML = 'Add todo'
 todoForms.appendChild(addButton)
+
+addButton.addEventListener('click', generateTodo)
 
 const prorgessBtn = document.createElement('button')
 prorgessBtn.className = 'prorgessBtn'
@@ -61,3 +151,4 @@ const deleteAll = document.createElement('button')
 deleteAll.className = 'deleteAll'
 deleteAll.innerHTML = 'Delete all'
 doneForms.appendChild(deleteAll)
+
