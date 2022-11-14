@@ -1,154 +1,204 @@
-const container = document.querySelector('.container')
-console.log(container);
+import { createDiv, createButton,createInput } from "./createElements"
+
 const header = document.querySelector('.header')
-console.log(header);
-const content = document.querySelector('.content')
-console.log(content);
+const headerContainer = document.querySelector('.header__container')
+const headerLogo = createDiv('header__logo','Trello')
+const headerClock = createDiv('header__clock')
+headerClock.id = 'clock'
 
-const todoForms = document.createElement('div')
-todoForms.className = 'todoForms'
-content.append(todoForms)
-
-const prorgessForms = document.createElement('div')
-prorgessForms.className = 'prorgessForms'
-content.append(prorgessForms)
-
-const doneForms = document.createElement('div')
-doneForms.className = 'doneForms'
-content.append(doneForms)
-
-const logo = document.createElement('div')
-logo.className = 'logo'
-logo.innerHTML = 'Trello'
-header.appendChild(logo)
-
-const clock = document.createElement('div')
-clock.className = 'clock'
-clock.id = 'clock'
-header.appendChild(clock)
+headerContainer.append(headerLogo,headerClock)
 
 function clockFun() {
 	let date = new Date(),
 		hours = (date.getHours() < 10) ? '0' + date.getHours() : date.getHours(),
-		minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes(),
+		minutes = (date.getMinutes() < 10) ? '0' + date.getMinutes() : date.getMinutes();
 		seconds = (date.getSeconds() < 10) ? '0' + date.getSeconds() : date.getSeconds();
 	document.getElementById('clock').innerHTML = hours + ':' + minutes + ':' + seconds;
 	//console.log(hours + ':' + minutes + ':' + seconds);
 }
 setInterval(clockFun, 1000);
 
-const todo = document.createElement('button')
-todo.className = 'todo'
-todo.innerHTML = 'TODO:'// + счетчик форм
-todoForms.appendChild(todo)
+const tasks = document.querySelector('.tasks')
+const tasksContainer = createDiv('container tasks__container')
+const tasksBoardCreated = createDiv('tasks-board tasks-board__created')
+const tasksBoardInProgress = createDiv('tasks-board tasks-board__inProrgess')
+const tasksBoardDone = createDiv('tasks-board tasks-board__done')
 
+tasks.append(tasksContainer)
+tasksContainer.append(tasksBoardCreated,tasksBoardInProgress,tasksBoardDone)
+
+const tasksBoardHeaderCreated= createDiv('tasks-board__header tasks-board__header_created', 'TODO:')
+const tasksHeaderInProgress= createDiv('tasks-board__header tasks-board__header_inProgress', 'IN PROGRESS:')
+const tasksHeaderDone= createDiv('tasks-board__header tasks-board__header_done', 'DONE:')
+const tasksBoardContentCreated = createDiv('tasks-board__content')
+const tasksBoardContentInProgress = createDiv('tasks-board__content')
+const tasksBoardContentDone = createDiv('tasks-board__content') 
+
+tasksBoardCreated.append(tasksBoardHeaderCreated,tasksBoardContentCreated)
+tasksBoardInProgress.append(tasksHeaderInProgress,tasksBoardContentInProgress)
+tasksBoardDone.append(tasksHeaderDone,tasksBoardContentDone)
+
+const addTaskButton = createButton('button tasks-board__addTaskButton',`+ Add todo`)
+tasksBoardCreated.append(addTaskButton)
+
+const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton','Delete All')
+tasksBoardDone.append(deleteTasksButton)
 
 //Array
 
 const todoCardsArray = []
 const dataCardsArray = []
-console.log(todoCardsArray)
+const createdTasksDataArray = []
+const inProgressTasksArray = []
+const doneTasksArray = []
 
+function addTask(){
+	taskData = {
+		id:new Date(),
+		title: title,
+		description: description,
+		date: new Date().toLocaleDateString(),
+
+	}
+	createdTasksDataArray.push(taskData)
+	generateTodo(createdTasksDataArray)
+}
 
 //TodoCard elements
-function generateTodo() {
+function generateTodo(array) {
 
-	const todoCardContainer = document.createElement('div')
-	todoCardContainer.className = 'todoCardContainer'
-	todoForms.appendChild(todoCardContainer)
+	array.forEach(element => {
+		const taskItem = createDiv('task-item')
+		taskItem.id = element.id
+		tasksBoardContentCreated.appendChild(taskItem)
 
-	const todoCardEditButton = document.createElement('input')
-	todoCardEditButton.className = 'todoCardEditButton'
-	todoCardEditButton.type = 'button'
-	todoCardEditButton.value = 'edit'
-	todoCardContainer.appendChild(todoCardEditButton)
+		const taskItemHeader = createDiv('task-item__header')
+		taskItem.appendChild(taskItemHeader)
 
-	const todoCardDeleteButton = document.createElement('input')
-	todoCardDeleteButton.className = 'todoCardDeleteButton'
-	todoCardDeleteButton.type = 'button'
-	todoCardDeleteButton.value = 'delete'
-	todoCardContainer.appendChild(todoCardDeleteButton)
+		const taskItemTitle = createDiv('task-item__title', element.title)
+		taskItemHeader.appendChild(taskItemTitle)
 
-	const todoCardSlideButton = document.createElement('input')
-	todoCardSlideButton.className = 'todoCardSlideButton'
-	todoCardSlideButton.type = 'button'
-	todoCardSlideButton.value = '>'
-	todoCardContainer.appendChild(todoCardSlideButton)
+		const taskItemButtons = createDiv('task-item__buttons-container')
+		taskItemHeader.append(taskItemButtons)
 
-	const todoCardHeader = document.createElement('div')
-	todoCardHeader.className = 'todoCardHeader'
-	todoCardContainer.appendChild(todoCardHeader)
+		const taskItemButtonEdit = createInput('button task-item__button task-item__button_header','button','edit')
+		taskItemButtonEdit.id = 'taskItemButtonEdit'
+		taskItemButtons.appendChild(taskItemButtonEdit)
 
-	const todoCardHeaderTitle = document.createElement('p')
-	todoCardHeaderTitle.className = 'todoCardHeaderTitle'
-	todoCardHeaderTitle.innerHTML = 'Title' // = .value in future
-	todoCardHeader.appendChild(todoCardHeaderTitle)
+		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header','button','delete')
+		taskItemButtonDelete.id = 'taskItemButtonDelete'
+		taskItemButtons.appendChild(taskItemButtonDelete)
 
+		const taskItemDescriptionContainer = createDiv('task-item__description-container')
+		taskItem.appendChild(taskItemDescriptionContainer)
 
+		const taskItemDescriptionText = createDiv('task-item__description-text', element.description) 
+		taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
-	const todoCardDescription = document.createElement('div')
-	todoCardDescription.className = 'todoCardDescription'
-	todoCardContainer.appendChild(todoCardDescription)
+		const taskItemSlideButton = createInput('task-item__slide-button','button','>')
+		taskItemDescriptionContainer.appendChild(taskItemSlideButton)
 
-	const todoCardDescriptionText = document.createElement('p')
-	todoCardDescriptionText.className = 'todoCardDescriptionText'
-	todoCardDescriptionText.innerHTML = 'Description' // = .value in future
-	todoCardDescription.appendChild(todoCardDescriptionText)
+		const taskItemFooter = createDiv('task-item__footer')
+		taskItem.appendChild(taskItemFooter)
 
-	const todoCardFooter = document.createElement('div')
-	todoCardFooter.className = 'todoCardFooter'
-	todoCardContainer.appendChild(todoCardFooter)
+		const taskItemUser = createDiv('task-item__user')
+		taskItemUser.innerHTML = element.user // = ...value in future
+		taskItemFooter.appendChild(taskItemUser)
 
-	const todoCardFooterUser = document.createElement('p')
-	todoCardFooterUser.className = 'todocardFooterUser'
-	todoCardFooterUser.innerHTML = 'User' // = ...value in future
-	todoCardFooter.appendChild(todoCardFooterUser)
-
-	const todoCardFooterTime = document.createElement('div')
-	todoCardFooterTime.className = 'todocardFooterTime'
-	todoCardFooterTime.innerHTML = new Date().toLocaleTimeString()
-	todoCardFooter.appendChild(todoCardFooterTime)
-
-	todoCardsArray.push(todoCardContainer)
-	console.log(todoCardsArray)
+		const taskItemTime = createDiv('task-item__date')
+		taskItemTime.innerHTML = element.date
+		taskItemFooter.appendChild(taskItemTime)
+	})
 	//TodoCard elements
 }
 
-//Delete Card
+function taskForm() {
+
+	const taskItem = createDiv('task-item')
+	tasksBoardContentCreated.appendChild(taskItem)
+
+	const taskItemTitleText = createInput('task-item__input-title','text') 
+	taskItemTitleText.placeholder = 'Title' // = .value in future
+	taskItem.appendChild(taskItemTitleText)
+
+	const taskItemDescriptionTextarea = document.createElement('textarea')
+	taskItemDescriptionTextarea.className = 'button task-item__textarea'
+	taskItemDescriptionTextarea.innerHTML = '' // = .value in future
+	taskItem.appendChild(taskItemDescriptionTextarea)
+
+	const taskItemFooter = createDiv('task-item__footer') 
+	taskItem.appendChild(taskItemFooter)
+
+	const taskItemSelectUser = document.createElement('select')
+	taskItemSelectUser.className = 'task-item__select-user'
+	taskItemFooter.appendChild(taskItemSelectUser)
+
+	const taskItemSelectUserItem1 = document.createElement('option')
+	taskItemSelectUserItem1.innerHTML = 'user1' 
+	const taskItemSelectUserItem2 = document.createElement('option')
+	taskItemSelectUserItem2.innerHTML = 'user2'
+	taskItemSelectUser.append(taskItemSelectUserItem1,taskItemSelectUserItem2)
+
+	const taskItemButtons = createDiv('task-item__buttons-container')
+	taskItemFooter.append(taskItemButtons)
+
+	const taskItemCancelButton = createInput('button task-item__button','button','Cancel')
+	const taskItemConfirmButton = createInput('button task-item__button','submit','Confirm') 
+	taskItemButtons.append(taskItemCancelButton,taskItemConfirmButton)
+		
+	taskItemCancelButton.addEventListener('click', () => taskItem.remove())
+
+	taskItemConfirmButton.addEventListener('click', () => {
+		taskData = {
+			id:new Date(),
+			title: taskItemTitleText.value,
+			description: taskItemDescriptionTextarea.value,
+			date: new Date().toLocaleDateString(),
+			user: taskItemSelectUser.value,
+		}
+		createdTasksDataArray.push(taskData)
+		tasksBoardContentCreated.innerHTML = null
+		generateTodo(createdTasksDataArray)
+		taskItem.remove()
+	})
+
+}
+
+addTaskButton.addEventListener('click', taskForm)
+
+// //Delete Card
 
 window.addEventListener('click', function (e) {
 
-	if (e.target.classList.contains('todoCardDeleteButton')) {
+	if (e.target.id == 'taskItemButtonDelete') {
 		//Delete element
-		let cardToDelete = e.target.parentNode
-		let index = todoCardsArray.indexOf(cardToDelete)
-		cardToDelete.remove()
-		todoCardsArray.splice(index, 1)
+		let cardToDelete = e.target.parentNode.parentNode.parentNode
+		createdTasksDataArray.forEach((element,index) => {
+			if(cardToDelete.id == element.id){
+				cardToDelete.remove()
+				createdTasksDataArray.splice(index, 1)
+				tasksBoardContentCreated.innerHTML = null
+				generateTodo(createdTasksDataArray)
+			}
+		})
+		
 	}
 })
 
-//Delete Card
+// //Delete Card
 
+// const prorgessBtn = document.createElement('button')
+// prorgessBtn.className = 'prorgessBtn'
+// prorgessBtn.innerHTML = 'IN PRORGESS'// + счетчик форм
+// tasksInProgress.appendChild(prorgessBtn)
 
-const addButton = document.createElement('button')
-addButton.className = 'addButton'
-addButton.innerHTML = 'Add todo'
-todoForms.appendChild(addButton)
+// const doneBtn = document.createElement('button')
+// doneBtn.className = 'doneBtn'
+// doneBtn.innerHTML = 'DONE'// + счетчик форм
+// tasksDone.appendChild(doneBtn)
 
-addButton.addEventListener('click', generateTodo)
-
-const prorgessBtn = document.createElement('button')
-prorgessBtn.className = 'prorgessBtn'
-prorgessBtn.innerHTML = 'IN PRORGESS'// + счетчик форм
-prorgessForms.appendChild(prorgessBtn)
-
-const doneBtn = document.createElement('button')
-doneBtn.className = 'doneBtn'
-doneBtn.innerHTML = 'DONE'// + счетчик форм
-doneForms.appendChild(doneBtn)
-
-const deleteAll = document.createElement('button')
-deleteAll.className = 'deleteAll'
-deleteAll.innerHTML = 'Delete all'
-doneForms.appendChild(deleteAll)
+// const deleteAll = document.createElement('button')
+// deleteAll.className = 'deleteAll'
+// deleteAll.innerHTML = 'Delete all'
+// tasksDone.appendChild(deleteAll)
 
