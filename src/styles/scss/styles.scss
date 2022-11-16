@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Open+Sans:ital,wght@0,700;1,400&family=Raleway:wght@500&family=Roboto+Condensed:ital,wght@1,300;1,400;1,700&display=swap');
 @import './components/variables.scss';
 @import './components/mixin.scss';
+@import './modalWin.scss';
 
 * {
 	margin: 0;
@@ -143,18 +144,18 @@ body {
 	}
 }
 
-.task-item{
+.task-item, .task-item__OpenModal {
 	// margin: 20px;
 	background-color: rgba(53, 204, 204, 0.767);
 	padding: 16px;
 	border-radius: 8px;
 	height: fit-content;
 
-	&__header{
+	&__header, &__header__OpenModal{
 		display: flex;
 	}
 
-	&__title{
+	&__title, &__title__OpenModal{
 		width: 100%;
 		border-radius: 2px;
 		padding: 5px;
@@ -163,7 +164,7 @@ body {
 		font-weight: 700;
 	}
 
-	&__input-title{
+	&__input-title, &__input-title__OpenModal{
 		width: 100%;
 		border-radius: 2px;
 		padding: 5px;
@@ -172,7 +173,7 @@ body {
 		cursor: pointer;
 	}
 
-	&__textarea{
+	&__textarea, &__textarea__OpenModal{
 		@include Roberto-400();
 		width: 100%;
 		font-size: 18px;
@@ -182,13 +183,13 @@ body {
 		max-height: 400px;
 	}
 
-	&__description-container{
+	&__description-container, &__description-container__OpenModal{
 		display: flex;
 		width: 100%;
 		margin-top: 16px ;
 	}
 
-	&__description-text{
+	&__description-text, &__description-text__OpenModal{
 		width: 100%;
 		padding: 8px;
 		background-color: white;
@@ -196,13 +197,13 @@ body {
 		text-align: left ;
 	}
 
-	&__slide-button{
+	&__slide-button, &__slide-button__OpenModal{
 		min-height: 50px;
 		padding: 5px;
 		margin-left: 10px;
 	}
 
-	&__footer{
+	&__footer, &__footer__OpenModal{
 		display: flex;
 		justify-content: space-between;
 		@include Roberto-400();
@@ -210,7 +211,7 @@ body {
 		margin-top: 16px;
 	}
 
-	&__select-user{
+	&__select-user, &__select-user__OpenModal{
 		width: 100%;
 		margin-right: 30px;
 		border: none;
@@ -218,21 +219,21 @@ body {
 		padding: 5px;
 	}
 
-	&__buttons-container{
+	&__buttons-container, &__buttons-container__OpenModal{
 		display: flex;
 	}
 
-	&__button{
+	&__button, &__button__OpenModal{
 		padding: 5px 10px;
 		border-radius: 3px;
 		border: none;
 
-		&_header{
+		&_header, &_header__OpenModal{
 			height: fit-content;
 		}
 	}
 
-	&__button+&__button{
+	&__button+&__button, &__button__OpenModal+&__button__OpenModal{
 		margin-left: 16px;
 	}
 }

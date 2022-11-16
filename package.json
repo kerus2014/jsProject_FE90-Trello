@@ -1,9 +1,8 @@
 {
 	"name": "hello_vsode",
 	"version": "1.0.0",
-	"source": "index.html",
 	"scripts": {
-		"start": "parcel serve --open",
+		"start": "parcel index.html --open",
 		"build": "parcel build"
 	},
 	"keywords": [],
