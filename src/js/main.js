@@ -46,31 +46,24 @@ tasksBoardDone.append(deleteTasksButton)
 
 //Array
 
-const todoCardsArray = []
-const dataCardsArray = []
-const createdTasksDataArray = []
-const inProgressTasksArray = []
-const doneTasksArray = []
-
-function addTask(){
-	taskData = {
-		id:new Date(),
-		title: title,
-		description: description,
-		date: new Date().toLocaleDateString(),
-
-	}
-	createdTasksDataArray.push(taskData)
-	generateTodo(createdTasksDataArray)
-}
+let createdTasksDataArray = []
+let inProgressTasksDataArray = []
+let doneTasksDataArray = []
 
 //TodoCard elements
 function generateTodo(array) {
 
-	array.forEach(element => {
+	array.forEach((element,index) => {
 		const taskItem = createDiv('task-item')
 		taskItem.id = element.id
-		tasksBoardContentCreated.appendChild(taskItem)
+
+		if(JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+			tasksBoardContentCreated.append(taskItem)
+		} else if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)){
+			tasksBoardContentInProgress.append(taskItem)
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
+			tasksBoardContentDone.append(taskItem)
+		}
 
 		const taskItemHeader = createDiv('task-item__header')
 		taskItem.appendChild(taskItemHeader)
@@ -83,11 +76,23 @@ function generateTodo(array) {
 
 		const taskItemButtonEdit = createInput('button task-item__button task-item__button_header','button','edit')
 		taskItemButtonEdit.id = 'taskItemButtonEdit'
-		taskItemButtons.appendChild(taskItemButtonEdit)
 
 		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header','button','delete')
 		taskItemButtonDelete.id = 'taskItemButtonDelete'
-		taskItemButtons.appendChild(taskItemButtonDelete)
+
+		const taskItemButtonBack = createInput('button task-item__button task-item__button_header','button','back')
+		taskItemButtonBack.id = 'taskItemButtonBack'
+
+		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header','button','complete')
+		taskItemButtonComplete.id = 'taskItemButtonComplete'
+
+		if(JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)){
+			taskItemButtons.append(taskItemButtonBack,taskItemButtonComplete)
+		} else if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+			taskItemButtons.append(taskItemButtonEdit,taskItemButtonDelete)
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
+			taskItemButtons.append(taskItemButtonDelete)
+		}
 
 		const taskItemDescriptionContainer = createDiv('task-item__description-container')
 		taskItem.appendChild(taskItemDescriptionContainer)
@@ -96,7 +101,50 @@ function generateTodo(array) {
 		taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
 		const taskItemSlideButton = createInput('task-item__slide-button','button','>')
-		taskItemDescriptionContainer.appendChild(taskItemSlideButton)
+		
+
+		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+			taskItemDescriptionContainer.appendChild(taskItemSlideButton)
+		}
+
+		taskItemSlideButton.addEventListener('click', () => {
+			inProgressTasksDataArray.push(element)
+			createdTasksDataArray.splice(index,1)
+			tasksBoardContentCreated.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(createdTasksDataArray)
+		})
+
+		taskItemButtonBack.addEventListener('click',() => {
+			createdTasksDataArray.push(element)
+			inProgressTasksDataArray.splice(index,1)
+			tasksBoardContentCreated.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(createdTasksDataArray)
+		} )
+
+		taskItemButtonComplete.addEventListener('click', () => {
+			doneTasksDataArray.push(element)
+			inProgressTasksDataArray.splice(index,1)
+			tasksBoardContentDone.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(doneTasksDataArray)
+		})
+
+		taskItemButtonDelete.addEventListener('click', () => {
+			if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+				createdTasksDataArray.splice(index,1)
+				tasksBoardContentCreated.innerHTML = null
+				generateTodo(createdTasksDataArray)
+			} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
+				doneTasksDataArray.splice(index,1)
+				tasksBoardContentDone.innerHTML = null
+				generateTodo(doneTasksDataArray)
+			}
+		})
 
 		const taskItemFooter = createDiv('task-item__footer')
 		taskItem.appendChild(taskItemFooter)
@@ -164,26 +212,16 @@ function taskForm() {
 
 }
 
+
+
 addTaskButton.addEventListener('click', taskForm)
 
+deleteTasksButton.addEventListener('click', () => {
+	doneTasksDataArray.splice(0)
+	tasksBoardContentDone.innerHTML = null
+})
 // //Delete Card
 
-window.addEventListener('click', function (e) {
-
-	if (e.target.id == 'taskItemButtonDelete') {
-		//Delete element
-		let cardToDelete = e.target.parentNode.parentNode.parentNode
-		createdTasksDataArray.forEach((element,index) => {
-			if(cardToDelete.id == element.id){
-				cardToDelete.remove()
-				createdTasksDataArray.splice(index, 1)
-				tasksBoardContentCreated.innerHTML = null
-				generateTodo(createdTasksDataArray)
-			}
-		})
-		
-	}
-})
 
 // //Delete Card
 
