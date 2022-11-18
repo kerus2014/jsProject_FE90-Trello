@@ -71,11 +71,14 @@ function generateTodo(array) {
 		taskItem.id = element.id
 
 		if(JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+			taskItem.className += ' tasksCreated-color'
 			tasksBoardContentCreated.append(taskItem)
 		} else if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)){
 			tasksBoardContentInProgress.append(taskItem)
+			taskItem.className += ' tasksInProgress-color'
 		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
 			tasksBoardContentDone.append(taskItem)
+			taskItem.className += ' tasksDone-color'
 		}
 
 		const taskItemHeader = createDiv('task-item__header')
@@ -179,6 +182,7 @@ function generateTodo(array) {
 function taskForm() {
 
 	const taskItem = createDiv('task-item')
+	taskItem.className += ' tasksCreated-color'
 	tasksBoardContentCreated.appendChild(taskItem)
 
 	const taskItemTitleText = createInput('task-item__input-title','text') 

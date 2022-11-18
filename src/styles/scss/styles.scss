@@ -148,6 +148,7 @@ body {
 	}
 }
 
+
 .task-item{
 	// margin: 20px;
 	background-color: rgba(53, 204, 204, 0.767);
@@ -240,6 +241,18 @@ body {
 	&__button+&__button{
 		margin-left: 16px;
 	}
+}
+
+.tasksCreated-color{
+	background-color:#C34D65;
+}	
+
+.tasksInProgress-color{
+	background-color:#93C6de; 
+}
+
+.tasksDone-color{
+	background-color:#8BDBAD ;
 }
 
 .task-item+.task-item{
