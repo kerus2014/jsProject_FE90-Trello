@@ -25,12 +25,27 @@ const tasksBoardCreated = createDiv('tasks-board tasks-board__created')
 const tasksBoardInProgress = createDiv('tasks-board tasks-board__inProrgess')
 const tasksBoardDone = createDiv('tasks-board tasks-board__done')
 
+//Array
+
+let createdTasksDataArray = []
+let inProgressTasksDataArray = []
+let doneTasksDataArray = []
+
 tasks.append(tasksContainer)
 tasksContainer.append(tasksBoardCreated, tasksBoardInProgress, tasksBoardDone)
 
-const tasksBoardHeaderCreated = createDiv('tasks-board__header tasks-board__header_created', 'TODO:')
-const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress', 'IN PROGRESS:')
-const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done', 'DONE:')
+const tasksHeaderCreated = createDiv('tasks-board__header tasks-board__header_created')
+const taskBoardHeaderCreatedTitle =  createDiv('tasks-board__header-title','Created:')
+const taskBoardHeaderCreatedCounter = createDiv('tasks-board__header-counter', createdTasksDataArray.length)
+
+const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress',)
+const tasksHeaderInProgressTitle =  createDiv('tasks-board__header-title','IN PROGRESS:')
+const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter', inProgressTasksDataArray.length)
+
+const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done')
+const tasksHeaderDoneTitle =  createDiv('tasks-board__header-title','DONE:')
+const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter', doneTasksDataArray.length)
+
 const tasksBoardContentCreated = createDiv('tasks-board__content')
 const tasksBoardContentInProgress = createDiv('tasks-board__content')
 const tasksBoardContentDone = createDiv('tasks-board__content')
@@ -46,22 +61,21 @@ const contentModal = createDiv('modal-window-content')
 //const modalWin = createDiv('modalWin-wrapper')
 // modalWin.id = modal
 
-tasksBoardCreated.append(tasksBoardHeaderCreated, tasksBoardContentCreated, wrapper)
-tasksBoardInProgress.append(tasksHeaderInProgress, tasksBoardContentInProgress)
-tasksBoardDone.append(tasksHeaderDone, tasksBoardContentDone)
 wrapper.append(contentModal)
 
-const addTaskButton = createButton('button tasks-board__addTaskButton', `+ Add todo`)
+tasksBoardCreated.append(tasksHeaderCreated,tasksBoardContentCreated, wrapper)
+tasksBoardInProgress.append(tasksHeaderInProgress,tasksBoardContentInProgress)
+tasksBoardDone.append(tasksHeaderDone,tasksBoardContentDone)
+
+tasksHeaderCreated.append(taskBoardHeaderCreatedTitle, taskBoardHeaderCreatedCounter)
+tasksHeaderInProgress.append(tasksHeaderInProgressTitle,tasksHeaderInProgressCounter)
+tasksHeaderDone.append(tasksHeaderDoneTitle,tasksHeaderDoneCounter)
+
+const addTaskButton = createButton('button tasks-board__addTaskButton',`+ Add todo`)
 tasksBoardCreated.append(addTaskButton)
 
 const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton', 'Delete All')
 tasksBoardDone.append(deleteTasksButton)
-
-//Array
-
-let createdTasksDataArray = []
-let inProgressTasksDataArray = []
-let doneTasksDataArray = []
 
 //TodoCard elements
 function generateTodo(array) {
@@ -170,6 +184,9 @@ function generateTodo(array) {
 		taskItemTime.innerHTML = element.date
 		taskItemFooter.appendChild(taskItemTime)
 	})
+	taskBoardHeaderCreatedCounter.innerHTML = createdTasksDataArray.length
+	tasksHeaderInProgressCounter.innerHTML = inProgressTasksDataArray.length
+	tasksHeaderDoneCounter.innerHTML = doneTasksDataArray.length
 	//TodoCard elements
 }
 
@@ -220,20 +237,17 @@ function taskForm() {
 		createdTasksDataArray.push(taskData)
 		tasksBoardContentCreated.innerHTML = null
 		generateTodo(createdTasksDataArray)
-		taskItem.remove()
 	})
 	return taskData
 }
-
-
 
 addTaskButton.addEventListener('click', taskForm)
 
 deleteTasksButton.addEventListener('click', () => {
 	doneTasksDataArray.splice(0)
 	tasksBoardContentDone.innerHTML = null
+	generateTodo(doneTasksDataArray)
 })
-// //Delete Card
 
 
 //localStorage

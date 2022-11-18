@@ -103,11 +103,16 @@ body {
 
 	&__header{
 		width: 100%;
-		padding: 10px;
-		padding-left: 30px;
+		padding: 10px 30px;
 		color: black;
 		font-family: open sans;
 		font-size: 18px;
+		display: flex;
+		justify-content: space-between;
+
+		&__header-title{
+			text-transform: capitalize;
+		}
 
 		&_created{
 			background-color: #C34D65;
