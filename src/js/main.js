@@ -25,12 +25,27 @@ const tasksBoardCreated = createDiv('tasks-board tasks-board__created')
 const tasksBoardInProgress = createDiv('tasks-board tasks-board__inProrgess')
 const tasksBoardDone = createDiv('tasks-board tasks-board__done')
 
+//Array
+
+let createdTasksDataArray = []
+let inProgressTasksDataArray = []
+let doneTasksDataArray = []
+
 tasks.append(tasksContainer)
 tasksContainer.append(tasksBoardCreated, tasksBoardInProgress, tasksBoardDone)
 
-const tasksBoardHeaderCreated = createDiv('tasks-board__header tasks-board__header_created', 'TODO:')
-const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress', 'IN PROGRESS:')
-const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done', 'DONE:')
+const tasksHeaderCreated = createDiv('tasks-board__header tasks-board__header_created')
+const taskBoardHeaderCreatedTitle = createDiv('tasks-board__header-title', 'Created:')
+const taskBoardHeaderCreatedCounter = createDiv('tasks-board__header-counter', createdTasksDataArray.length)
+
+const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress',)
+const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'IN PROGRESS:')
+const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter', inProgressTasksDataArray.length)
+
+const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done')
+const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'DONE:')
+const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter', doneTasksDataArray.length)
+
 const tasksBoardContentCreated = createDiv('tasks-board__content')
 const tasksBoardContentInProgress = createDiv('tasks-board__content')
 const tasksBoardContentDone = createDiv('tasks-board__content')
@@ -39,17 +54,15 @@ const wrapper = createDiv('hidden')
 wrapper.id = 'modalWindowWrapper'
 
 const contentModal = createDiv('modal-window-content')
-//const modalText = openModal()
+wrapper.append(contentModal)
 
-//contentModal.append(modalText)
-
-//const modalWin = createDiv('modalWin-wrapper')
-// modalWin.id = modal
-
-tasksBoardCreated.append(tasksBoardHeaderCreated, tasksBoardContentCreated, wrapper)
+tasksBoardCreated.append(tasksHeaderCreated, tasksBoardContentCreated, wrapper)
 tasksBoardInProgress.append(tasksHeaderInProgress, tasksBoardContentInProgress)
 tasksBoardDone.append(tasksHeaderDone, tasksBoardContentDone)
-wrapper.append(contentModal)
+
+tasksHeaderCreated.append(taskBoardHeaderCreatedTitle, taskBoardHeaderCreatedCounter)
+tasksHeaderInProgress.append(tasksHeaderInProgressTitle, tasksHeaderInProgressCounter)
+tasksHeaderDone.append(tasksHeaderDoneTitle, tasksHeaderDoneCounter)
 
 const addTaskButton = createButton('button tasks-board__addTaskButton', `+ Add todo`)
 tasksBoardCreated.append(addTaskButton)
@@ -57,34 +70,20 @@ tasksBoardCreated.append(addTaskButton)
 const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton', 'Delete All')
 tasksBoardDone.append(deleteTasksButton)
 
-//Array
-
-const todoCardsArray = []
-const dataCardsArray = []
-let createdTasksDataArray = []
-const inProgressTasksArray = []
-const doneTasksArray = []
-
-
-function addTask() {
-	taskData = {
-		id: new Date(),
-		title: title,
-		description: description,
-		date: new Date().toLocaleDateString(),
-
-	}
-	createdTasksDataArray.push(taskData)
-	generateTodo(createdTasksDataArray)
-}
-
 //TodoCard elements
 function generateTodo(array) {
 
-	array.forEach(element => {
+	array.forEach((element, index) => {
 		const taskItem = createDiv('task-item')
 		taskItem.id = element.id
-		tasksBoardContentCreated.appendChild(taskItem)
+
+		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+			tasksBoardContentCreated.append(taskItem)
+		} else if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)) {
+			tasksBoardContentInProgress.append(taskItem)
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
+			tasksBoardContentDone.append(taskItem)
+		}
 
 		const taskItemHeader = createDiv('task-item__header')
 		taskItem.appendChild(taskItemHeader)
@@ -97,11 +96,23 @@ function generateTodo(array) {
 
 		const taskItemButtonEdit = createInput('button task-item__button task-item__button_header', 'button', 'edit')
 		taskItemButtonEdit.id = 'taskItemButtonEdit'
-		taskItemButtons.appendChild(taskItemButtonEdit)
 
 		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header', 'button', 'delete')
 		taskItemButtonDelete.id = 'taskItemButtonDelete'
-		taskItemButtons.appendChild(taskItemButtonDelete)
+
+		const taskItemButtonBack = createInput('button task-item__button task-item__button_header', 'button', 'back')
+		taskItemButtonBack.id = 'taskItemButtonBack'
+
+		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header', 'button', 'complete')
+		taskItemButtonComplete.id = 'taskItemButtonComplete'
+
+		if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)) {
+			taskItemButtons.append(taskItemButtonBack, taskItemButtonComplete)
+		} else if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+			taskItemButtons.append(taskItemButtonEdit, taskItemButtonDelete)
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
+			taskItemButtons.append(taskItemButtonDelete)
+		}
 
 		const taskItemDescriptionContainer = createDiv('task-item__description-container')
 		taskItem.appendChild(taskItemDescriptionContainer)
@@ -110,7 +121,50 @@ function generateTodo(array) {
 		taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
 		const taskItemSlideButton = createInput('task-item__slide-button', 'button', '>')
-		taskItemDescriptionContainer.appendChild(taskItemSlideButton)
+
+
+		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+			taskItemDescriptionContainer.appendChild(taskItemSlideButton)
+		}
+
+		taskItemSlideButton.addEventListener('click', () => {
+			inProgressTasksDataArray.push(element)
+			createdTasksDataArray.splice(index, 1)
+			tasksBoardContentCreated.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(createdTasksDataArray)
+		})
+
+		taskItemButtonBack.addEventListener('click', () => {
+			createdTasksDataArray.push(element)
+			inProgressTasksDataArray.splice(index, 1)
+			tasksBoardContentCreated.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(createdTasksDataArray)
+		})
+
+		taskItemButtonComplete.addEventListener('click', () => {
+			doneTasksDataArray.push(element)
+			inProgressTasksDataArray.splice(index, 1)
+			tasksBoardContentDone.innerHTML = null
+			tasksBoardContentInProgress.innerHTML = null
+			generateTodo(inProgressTasksDataArray)
+			generateTodo(doneTasksDataArray)
+		})
+
+		taskItemButtonDelete.addEventListener('click', () => {
+			if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+				createdTasksDataArray.splice(index, 1)
+				tasksBoardContentCreated.innerHTML = null
+				generateTodo(createdTasksDataArray)
+			} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
+				doneTasksDataArray.splice(index, 1)
+				tasksBoardContentDone.innerHTML = null
+				generateTodo(doneTasksDataArray)
+			}
+		})
 
 		const taskItemFooter = createDiv('task-item__footer')
 		taskItem.appendChild(taskItemFooter)
@@ -123,6 +177,9 @@ function generateTodo(array) {
 		taskItemTime.innerHTML = element.date
 		taskItemFooter.appendChild(taskItemTime)
 	})
+	taskBoardHeaderCreatedCounter.innerHTML = createdTasksDataArray.length
+	tasksHeaderInProgressCounter.innerHTML = inProgressTasksDataArray.length
+	tasksHeaderDoneCounter.innerHTML = doneTasksDataArray.length
 	//TodoCard elements
 }
 
@@ -163,40 +220,29 @@ function taskForm() {
 	taskItemCancelButton.addEventListener('click', () => taskItem.remove())
 
 	taskItemConfirmButton.addEventListener('click', () => {
-		taskData = {
+		let taskData = {
 			id: new Date(),
 			title: taskItemTitleText.value,
 			description: taskItemDescriptionTextarea.value,
 			date: new Date().toLocaleDateString(),
 			user: taskItemSelectUser.value,
 		}
+
 		createdTasksDataArray.push(taskData)
 		tasksBoardContentCreated.innerHTML = null
 		generateTodo(createdTasksDataArray)
-		taskItem.remove()
+		return taskData
 	})
-	return taskData
 }
 
 addTaskButton.addEventListener('click', taskForm)
 
-// //Delete Card
-
-window.addEventListener('click', function (e) {
-
-	if (e.target.id == 'taskItemButtonDelete') {
-		//Delete element
-		let cardToDelete = e.target.parentNode.parentNode.parentNode
-		createdTasksDataArray.forEach((element, index) => {
-			if (cardToDelete.id == element.id) {
-				cardToDelete.remove()
-				createdTasksDataArray.splice(index, 1)
-				tasksBoardContentCreated.innerHTML = null
-				generateTodo(createdTasksDataArray)
-			}
-		})
-	}
+deleteTasksButton.addEventListener('click', () => {
+	doneTasksDataArray.splice(0)
+	tasksBoardContentDone.innerHTML = null
+	generateTodo(doneTasksDataArray)
 })
+
 
 //localStorage
 window.addEventListener('beforeunload', function () {
@@ -210,56 +256,66 @@ window.addEventListener('load', function (e) {
 })
 
 function openModal() {
-	const taskItemOpenModal = createDiv('task-item__OpenModal')
+	const taskItemOpenModal = createDiv('task-item-openmodal')
 	contentModal.appendChild(taskItemOpenModal)
 
-	const taskItemTitleTextOpenModal = createInput('task-item__input-title__OpenModal', 'text__OpenModal')
-	taskItemTitleTextOpenModal.placeholder = ''// = .value in future
+	const taskItemTitleTextOpenModal = createInput('task-item__input-title-openmodal', 'text')
+	//let taskItemTitleText = document.querySelector('.task-item__input-title')
+	taskItemTitleTextOpenModal.placeholder = ''//taskItemTitleText.placeholder//''// = .value in future
 	taskItemOpenModal.appendChild(taskItemTitleTextOpenModal)
 
-	const taskItemDescriptionTextareaOpenModal = document.createElement('textarea__OpenModal')
-	taskItemDescriptionTextareaOpenModal.className = 'button task-item__textarea__OpenModal'
+	const taskItemDescriptionTextareaOpenModal = document.createElement('textarea-openModal')
+	taskItemDescriptionTextareaOpenModal.className = 'button task-item__textarea-openModal'
 	taskItemDescriptionTextareaOpenModal.innerHTML = ''// = .value in future
 	taskItemOpenModal.appendChild(taskItemDescriptionTextareaOpenModal)
+
+	const taskItemDescriptionContainer = createDiv('task-item__description-container-openmodal')
+	taskItemOpenModal.appendChild(taskItemDescriptionContainer)
+
+	const taskItemDescriptionText = createInput('task-item__description-text-openmodal')
+	taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
 	const taskItemFooterOpenModal = createDiv('task-item__footer')
 	taskItemOpenModal.appendChild(taskItemFooterOpenModal)
 
-	const taskItemSelectUserOpenModal = document.createElement('select__OpenModal')
-	taskItemSelectUserOpenModal.className = 'task-item__select-user__OpenModal'
+	const taskItemSelectUserOpenModal = document.createElement('select')
+	taskItemSelectUserOpenModal.className = 'task-item__select-user'
 	taskItemFooterOpenModal.appendChild(taskItemSelectUserOpenModal)
 
-	const taskItemSelectUserItem1OpenModal = document.createElement('option__OpenModal')
+	const taskItemSelectUserItem1OpenModal = document.createElement('option')
 	taskItemSelectUserItem1OpenModal.innerHTML = 'user1'
-	const taskItemSelectUserItem2OpenModal = document.createElement('option__OpenModal')
+	const taskItemSelectUserItem2OpenModal = document.createElement('option')
 	taskItemSelectUserItem2OpenModal.innerHTML = 'user2'
 	taskItemSelectUserOpenModal.append(taskItemSelectUserItem1OpenModal, taskItemSelectUserItem2OpenModal)
 
-	const taskItemButtonsOpenModal = createDiv('task-item__buttons-container__OpenModal')
+	const taskItemButtonsOpenModal = createDiv('task-item__buttons-container-openmodal')
 	taskItemFooterOpenModal.append(taskItemButtonsOpenModal)
 
-	const taskItemCancelButtonOpenModal = createInput('button task-item__button__OpenModal', 'button__OpenModal', 'Cancel')
-	const taskItemConfirmButtonOpenModal = createInput('button task-item__button__OpenModal', 'submit__OpenModal', 'Confirm')
+	const taskItemCancelButtonOpenModal = createInput('button task-item__button-openmodal', 'button', 'Cancel')
+	const taskItemConfirmButtonOpenModal = createInput('button task-item__button-openmodal confirm-button', 'submit', 'Confirm')
 	taskItemButtonsOpenModal.append(taskItemCancelButtonOpenModal, taskItemConfirmButtonOpenModal)
 
-	taskItemCancelButtonOpenModal.addEventListener('click', () => taskItemOpenModal.remove())
-
-	taskItemConfirmButtonOpenModal.addEventListener('click', () => {
-		// taskData = {
-		// 	id: new Date(),
-		// 	title: taskItemTitleTextOpenModal.value,
-		// 	description: taskItemDescriptionTextareaOpenModal.value,
-		// 	date: new Date().toLocaleDateString(),
-		// 	user: taskItemSelectUserOpenModal.value,
-		// }
-		// createdTasksDataArray.push(taskData)
+	taskItemCancelButtonOpenModal.addEventListener('click', () => {
 		wrapper.classList.add('hidden')
-		// tasksBoardContentCreated.innerHTML = null
-		// generateTodo(createdTasksDataArray)
-		// taskItemOpenModal.remove()
-
 	})
-	return taskItemOpenModal
+
+	//taskItemConfirmButtonOpenModal.addEventListener('click', () => {
+	//wrapper.classList.add('hidden')
+	// taskData.title = taskItemTitleTextOpenModal.value,
+	// 	taskData.description = taskItemDescriptionTextareaOpenModal.value,
+	// 	taskData.user = taskItemSelectUserOpenModal.value,
+	// taskData = {
+	// 	//id: new Date(),
+	// 	title: taskItemTitleTextOpenModal.value,
+	// 	description: taskItemDescriptionTextareaOpenModal.value,
+	// 	//date: new Date().toLocaleDateString(),
+	// 	user: taskItemSelectUserOpenModal.value,
+	// }
+	//createdTasksDataArray.push(taskData)
+	//tasksBoardContentCreated.innerHTML = null
+	//generateTodo(createdTasksDataArray)
+	//})
+	//return taskItemOpenModal
 }
 
 
@@ -268,24 +324,33 @@ window.addEventListener('click', function (e) {
 		let cardOpenModalWindow = e.target.parentNode.parentNode.parentNode
 		createdTasksDataArray.forEach((element, index) => {
 			if (cardOpenModalWindow.id == element.id) {
-				//let modalWindowWrapper = document.querySelector('#modalWindowWrapper')
+				console.log(cardOpenModalWindow)
 				openModal()
 				wrapper.classList.remove('hidden')
-				//let taskItemDescriptionTextarea = cardOpenModalWindow.querySelector('.button task-item__textarea')
-				let taskItemDescriptionTextareaOpenModal = cardOpenModalWindow.querySelector('.button task-item__textarea__OpenModal')
-				taskItemDescriptionTextareaOpenModal.innerHTML = taskData.description
-				//taskItemDescriptionTextarea.innerHTML
-				//openModal()
-				// let taskItemTitleTextCard = cardOpenModalWindow.querySelector('.task-item__input-title')
-				// let taskItemTitleText = cardOpenModalWindow.querySelector('.task-item__input-title_OpenModal')
-				// taskItemTitleText.placehold = taskData.title
-				//taskForm()
+				let title = cardOpenModalWindow.querySelector('.task-item__title')
+				console.log(title);
+				let text = cardOpenModalWindow.querySelector('.task-item__description-text')
+				console.log(text)
+				let titleOpenModal = document.querySelector('.task-item__input-title-openmodal')
+				console.log(titleOpenModal);
+				titleOpenModal.placeholder = title.innerHTML
+				let textOpenModal = document.querySelector('.task-item__description-text-openmodal')
+				console.log(textOpenModal);
+				textOpenModal.placeholder = text.innerHTML
 
+				let confirmModal = document.querySelector('.confirm-button')
+				console.log(confirmModal);
+				confirmModal.addEventListener('click', () => {
+					title.innerHTML = titleOpenModal.placeholder
+					text.innerHTML = textOpenModal.placeholder
+					wrapper.classList.add('hidden')
+					//generateTodo(createdTasksDataArray)
+				})
 			}
 		})
 	}
 })
-// //Delete Card
+
 
 // const prorgessBtn = document.createElement('button')
 // prorgessBtn.className = 'prorgessBtn'
