@@ -341,10 +341,12 @@ window.addEventListener('click', function (e) {
 				let confirmModal = document.querySelector('.confirm-button')
 				console.log(confirmModal);
 				confirmModal.addEventListener('click', () => {
-					title.innerHTML = titleOpenModal.placeholder
-					text.innerHTML = textOpenModal.placeholder
+					title.innerHTML = titleOpenModal.value
+					text.innerHTML = textOpenModal.value
 					wrapper.classList.add('hidden')
-					//generateTodo(createdTasksDataArray)
+					//cardOpenModalWindow
+					createdTasksDataArray.push(cardOpenModalWindow)
+					generateTodo(cardOpenModalWindow)
 				})
 			}
 		})
