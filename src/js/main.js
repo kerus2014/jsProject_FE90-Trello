@@ -176,6 +176,75 @@ function generateTodo(array) {
 			}
 		})
 
+		function openEditTaskItemModalWindow () {
+			const modalWindow = createDiv('modal-window')
+			document.body.append(modalWindow)
+
+			const taskItem = createDiv('task-item modal-window__task-item')
+			taskItem.className += ' tasksCreated-color'
+			document.body.append(taskItem)
+
+			const taskItemTitleText = createInput('task-item__input-title', 'text')
+			taskItemTitleText.value = element.title // = .value in future
+			taskItem.appendChild(taskItemTitleText)
+
+			const taskItemDescriptionTextarea = document.createElement('textarea')
+			taskItemDescriptionTextarea.className = 'button task-item__textarea'
+			taskItemDescriptionTextarea.value = element.description // = .value in future
+			taskItem.appendChild(taskItemDescriptionTextarea)
+
+			const taskItemFooter = createDiv('task-item__footer')
+			taskItem.appendChild(taskItemFooter)
+
+			const taskItemSelectUser = document.createElement('select')
+			taskItemSelectUser.className = 'task-item__select-user'
+			taskItemFooter.appendChild(taskItemSelectUser)
+
+			let userOptionsArray = []
+
+			const taskItemSelectUserItem1 = document.createElement('option')
+			taskItemSelectUserItem1.innerHTML = 'user1'
+			taskItemSelectUserItem1.value = 'user1'
+			userOptionsArray.push(taskItemSelectUserItem1)
+			const taskItemSelectUserItem2 = document.createElement('option')
+			taskItemSelectUserItem2.innerHTML = 'user2'
+			taskItemSelectUserItem2.value = 'user2'
+			userOptionsArray.push(taskItemSelectUserItem1)
+
+			console.log(userOptionsArray);
+			
+			userOptionsArray.forEach(el =>{
+				if(el.value === element.user){
+					el.selected = true
+				}
+			})
+			taskItemSelectUser.append(taskItemSelectUserItem1, taskItemSelectUserItem2)
+
+			const taskItemButtons = createDiv('task-item__buttons-container')
+			taskItemFooter.append(taskItemButtons)
+
+			const taskItemCancelButton = createInput('button task-item__button', 'button', 'Cancel')
+			const taskItemConfirmButton = createInput('button task-item__button', 'submit', 'Confirm')
+			taskItemButtons.append(taskItemCancelButton, taskItemConfirmButton)
+
+			taskItemCancelButton.addEventListener('click', () => {
+				taskItem.remove()
+				modalWindow.remove()
+			})
+
+			taskItemConfirmButton.addEventListener('click', () => {
+				element.title = taskItemTitleText.value
+				element.description = taskItemDescriptionTextarea.value
+				element.user = taskItemSelectUser.value
+				taskItem.remove()
+				modalWindow.remove()
+				tasksBoardContentCreated.innerHTML = null
+				generateTodo(createdTasksDataArray)
+			})
+		}
+
+		taskItemButtonEdit.addEventListener('click', openEditTaskItemModalWindow)
+
 		const taskItemFooter = createDiv('task-item__footer')
 		taskItem.appendChild(taskItemFooter)
 
@@ -264,97 +333,3 @@ window.addEventListener('load', function (e) {
 	createdTasksDataArray = JSON.parse(dataFromLocalStorage) || []
 	generateTodo(createdTasksDataArray)
 })
-
-function openModal() {
-	const taskItemOpenModal = createDiv('task-item__OpenModal')
-	contentModal.appendChild(taskItemOpenModal)
-
-	const taskItemTitleTextOpenModal = createInput('task-item__input-title__OpenModal', 'text__OpenModal')
-	taskItemTitleTextOpenModal.placeholder = ''// = .value in future
-	taskItemOpenModal.appendChild(taskItemTitleTextOpenModal)
-
-	const taskItemDescriptionTextareaOpenModal = document.createElement('textarea__OpenModal')
-	taskItemDescriptionTextareaOpenModal.className = 'button task-item__textarea__OpenModal'
-	taskItemDescriptionTextareaOpenModal.innerHTML = ''// = .value in future
-	taskItemOpenModal.appendChild(taskItemDescriptionTextareaOpenModal)
-
-	const taskItemFooterOpenModal = createDiv('task-item__footer')
-	taskItemOpenModal.appendChild(taskItemFooterOpenModal)
-
-	const taskItemSelectUserOpenModal = document.createElement('select__OpenModal')
-	taskItemSelectUserOpenModal.className = 'task-item__select-user__OpenModal'
-	taskItemFooterOpenModal.appendChild(taskItemSelectUserOpenModal)
-
-	const taskItemSelectUserItem1OpenModal = document.createElement('option__OpenModal')
-	taskItemSelectUserItem1OpenModal.innerHTML = 'user1'
-	const taskItemSelectUserItem2OpenModal = document.createElement('option__OpenModal')
-	taskItemSelectUserItem2OpenModal.innerHTML = 'user2'
-	taskItemSelectUserOpenModal.append(taskItemSelectUserItem1OpenModal, taskItemSelectUserItem2OpenModal)
-
-	const taskItemButtonsOpenModal = createDiv('task-item__buttons-container__OpenModal')
-	taskItemFooterOpenModal.append(taskItemButtonsOpenModal)
-
-	const taskItemCancelButtonOpenModal = createInput('button task-item__button__OpenModal', 'button__OpenModal', 'Cancel')
-	const taskItemConfirmButtonOpenModal = createInput('button task-item__button__OpenModal', 'submit__OpenModal', 'Confirm')
-	taskItemButtonsOpenModal.append(taskItemCancelButtonOpenModal, taskItemConfirmButtonOpenModal)
-
-	taskItemCancelButtonOpenModal.addEventListener('click', () => taskItemOpenModal.remove())
-
-	taskItemConfirmButtonOpenModal.addEventListener('click', () => {
-		// taskData = {
-		// 	id: new Date(),
-		// 	title: taskItemTitleTextOpenModal.value,
-		// 	description: taskItemDescriptionTextareaOpenModal.value,
-		// 	date: new Date().toLocaleDateString(),
-		// 	user: taskItemSelectUserOpenModal.value,
-		// }
-		// createdTasksDataArray.push(taskData)
-		wrapper.classList.add('hidden')
-		// tasksBoardContentCreated.innerHTML = null
-		// generateTodo(createdTasksDataArray)
-		// taskItemOpenModal.remove()
-
-	})
-	return taskItemOpenModal
-}
-
-
-window.addEventListener('click', function (e) {
-	if (e.target.id == 'taskItemButtonEdit') {
-		let cardOpenModalWindow = e.target.parentNode.parentNode.parentNode
-		createdTasksDataArray.forEach((element, index) => {
-			if (cardOpenModalWindow.id == element.id) {
-				//let modalWindowWrapper = document.querySelector('#modalWindowWrapper')
-				openModal()
-				wrapper.classList.remove('hidden')
-				//let taskItemDescriptionTextarea = cardOpenModalWindow.querySelector('.button task-item__textarea')
-				let taskItemDescriptionTextareaOpenModal = cardOpenModalWindow.querySelector('.button task-item__textarea__OpenModal')
-				taskItemDescriptionTextareaOpenModal.innerHTML = taskData.description
-				//taskItemDescriptionTextarea.innerHTML
-				//openModal()
-				// let taskItemTitleTextCard = cardOpenModalWindow.querySelector('.task-item__input-title')
-				// let taskItemTitleText = cardOpenModalWindow.querySelector('.task-item__input-title_OpenModal')
-				// taskItemTitleText.placehold = taskData.title
-				//taskForm()
-
-			}
-		})
-	}
-})
-// //Delete Card
-
-// const prorgessBtn = document.createElement('button')
-// prorgessBtn.className = 'prorgessBtn'
-// prorgessBtn.innerHTML = 'IN PRORGESS'// + счетчик форм
-// tasksInProgress.appendChild(prorgessBtn)
-
-// const doneBtn = document.createElement('button')
-// doneBtn.className = 'doneBtn'
-// doneBtn.innerHTML = 'DONE'// + счетчик форм
-// tasksDone.appendChild(doneBtn)
-
-// const deleteAll = document.createElement('button')
-// deleteAll.className = 'deleteAll'
-// deleteAll.innerHTML = 'Delete all'
-// tasksDone.appendChild(deleteAll)
-
