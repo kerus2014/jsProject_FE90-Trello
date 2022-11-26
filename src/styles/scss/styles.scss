@@ -243,6 +243,18 @@ body {
 	}
 }
 
+.tasksCreated-color{
+	background-color:#C34D65;
+}	
+
+.tasksInProgress-color{
+	background-color:#93C6de; 
+}
+
+.tasksDone-color{
+	background-color:#8BDBAD ;
+}
+
 .task-item+.task-item{
 	margin-top: 16px;
 }
