@@ -19,7 +19,7 @@ body {
 	padding-right: 20px;
 }
 
-.button:hover{
+.button:hover {
 	background-color: grey;
 }
 
@@ -27,7 +27,7 @@ body {
 	width: 100%;
 	background: #6838A6;
 
-	&__container{
+	&__container {
 		padding-top: 16px;
 		padding-bottom: 16px;
 		height: fit-content;
@@ -69,39 +69,33 @@ body {
 
 .tasks {
 
-	&__container{
+	&__container {
 		padding-top: 20px;
 		padding-bottom: 20px;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
-		grid-gap:20px;
+		grid-gap: 20px;
 
 		@media (max-width: 824px) {
 			grid-template-columns: 1fr;
 			grid-template-rows: 1fr 1fr 1fr;
 		}
 	}
-	
+
 }
 
-.tasks-board{
+.tasks-board {
 	@include styleForms();
 	overflow: hidden;
 	background-color: #efefef;
 
-	&__created{
-		
-	}
+	&__created {}
 
-	&__inProgress{
-		
-	}
+	&__inProgress {}
 
-	&__done{
-		
-	}
+	&__done {}
 
-	&__header{
+	&__header {
 		width: 100%;
 		padding: 10px 30px;
 		color: black;
@@ -110,32 +104,33 @@ body {
 		display: flex;
 		justify-content: space-between;
 
-		&__header-title{
+		&__header-title {
 			text-transform: capitalize;
 		}
 
-		&_created{
+		&_created {
 			background-color: #C34D65;
 		}
 
-		&_inProgress{
+		&_inProgress {
 			background-color: #93C6de;
 		}
 
-		&_done{
+		&_done {
 			background-color: #8BDBAD;
 		}
 	}
 
-	&__content{
+	&__content {
 		width: 100%;
 		text-align: center;
 		padding: 16px;
 	}
 
 	&__addTaskButton,
-	&__deleteAllTasksButton{
-		background-color:#C34D65;
+	&__deleteAllTasksButton {
+		cursor: pointer;
+		background-color: #C34D65;
 		border: none;
 		color: black;
 		width: 100%;
@@ -143,24 +138,24 @@ body {
 		font-size: 18px;
 		font-weight: 700;
 	}
-	
-	&__deleteAllTasksButton{
+
+	&__deleteAllTasksButton {
 		background-color: #8BDBAD;
 	}
 }
 
-.task-item{
+.task-item {
 	// margin: 20px;
 	background-color: rgba(53, 204, 204, 0.767);
 	padding: 16px;
 	border-radius: 8px;
 	height: fit-content;
 
-	&__header{
+	&__header {
 		display: flex;
 	}
 
-	&__title{
+	&__title {
 		width: 100%;
 		border-radius: 2px;
 		padding: 5px;
@@ -169,7 +164,7 @@ body {
 		font-weight: 700;
 	}
 
-	&__input-title{
+	&__input-title {
 		width: 100%;
 		border-radius: 2px;
 		padding: 5px;
@@ -178,7 +173,7 @@ body {
 		cursor: pointer;
 	}
 
-	&__textarea{
+	&__textarea {
 		@include Roberto-400();
 		width: 100%;
 		font-size: 18px;
@@ -188,27 +183,27 @@ body {
 		max-height: 400px;
 	}
 
-	&__description-container{
+	&__description-container {
 		display: flex;
 		width: 100%;
-		margin-top: 16px ;
+		margin-top: 16px;
 	}
 
-	&__description-text{
+	&__description-text {
 		width: 100%;
 		padding: 8px;
 		background-color: white;
 		border-radius: 5px;
-		text-align: left ;
+		text-align: left;
 	}
 
-	&__slide-button{
+	&__slide-button {
 		min-height: 50px;
 		padding: 5px;
 		margin-left: 10px;
 	}
 
-	&__footer{
+	&__footer {
 		display: flex;
 		justify-content: space-between;
 		@include Roberto-400();
@@ -216,7 +211,7 @@ body {
 		margin-top: 16px;
 	}
 
-	&__select-user{
+	&__select-user {
 		width: 100%;
 		margin-right: 30px;
 		border: none;
@@ -224,46 +219,46 @@ body {
 		padding: 5px;
 	}
 
-	&__buttons-container{
+	&__buttons-container {
 		display: flex;
 	}
 
-	&__button{
+	&__button {
 		padding: 5px 10px;
 		border-radius: 3px;
 		border: none;
 
-		&_header{
+		&_header {
 			height: fit-content;
 		}
 	}
 
-	&__button+&__button{
+	&__button+&__button {
 		margin-left: 16px;
 	}
 }
 
-.tasksCreated-color{
-	background-color:#C34D65;
-}	
-
-.tasksInProgress-color{
-	background-color:#93C6de; 
+.tasksCreated-color {
+	background-color: #C34D65;
 }
 
-.tasksDone-color{
-	background-color:#8BDBAD ;
+.tasksInProgress-color {
+	background-color: #93C6de;
 }
 
-.task-item+.task-item{
+.tasksDone-color {
+	background-color: #8BDBAD;
+}
+
+.task-item+.task-item {
 	margin-top: 16px;
 }
 
-.modal-window{
+.modal-window {
 	position: absolute;
-	top:0;
-	left:0;
-	z-index:10;
+	top: 0;
+	left: 0;
+	z-index: 10;
 	width: 100vw;
 	height: 100vh;
 	background-color: aquamarine;
@@ -272,7 +267,7 @@ body {
 	justify-content: center;
 	align-items: center;
 
-	&__task-item{
+	&__task-item {
 		position: absolute;
 		padding: 30px;
 		width: 50%;
@@ -281,5 +276,21 @@ body {
 		left: 50%;
 		z-index: 11;
 		transform: translateX(-50%) translateY(-50%);
+
+		.task-item__text {
+			text-align: center;
+			font-size: 20px;
+			margin-bottom: 10px;
+		}
 	}
+}
+
+.button {
+	cursor: pointer;
+}
+
+.disabled {
+	background-color: #3a5a48;
+	opacity: 0.5;
+	cursor: auto;
 }
