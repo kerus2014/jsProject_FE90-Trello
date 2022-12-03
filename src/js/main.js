@@ -1,4 +1,26 @@
-import { createDiv, createButton, createInput } from "./createElements"
+// import { createDiv, createButton, createInput } from "./createElements"
+
+function createDiv(divClassName, divInnerText = ''){
+	divName = document.createElement('div')
+	divName.className = divClassName
+	divName.innerHTML = divInnerText
+	return divName
+}
+
+function createButton(btnClassName, btnInnerText = ''){
+	btnName = document.createElement('button')
+	btnName.className = btnClassName
+	btnName.innerHTML = btnInnerText
+	return btnName
+}
+
+function createInput(inputClassName, inputType,inputValue = null){
+    inputName = document.createElement('input')
+	inputName.className = inputClassName
+	inputName.type = inputType
+    inputName.value = inputValue
+	return inputName
+}
 
 const header = document.querySelector('.header')
 const headerContainer = document.querySelector('.header__container')
@@ -178,15 +200,16 @@ function generateTodo(array) {
 
 		//Drag start drag end
 		const dragStart = function () {
-			setTimeout(() => {
-				taskItem.classList.add('hide')
-			}, 0);
+			// setTimeout(() => {
+			// 	taskItem.classList.add('hide')	
+			// }, 0);
+			console.log(element.id);
 		}
 		const dragEnd = function () {
-			taskItem.classList.remove('hide')
+			// taskItem.classList.remove('hide')
 		}
 		taskItem.addEventListener('dragstart', dragStart)
-		taskItem.addEventListener('dragend', dragEnd)
+		// taskItem.addEventListener('dragend', dragEnd)
 		//Drag start drag end
 
 		//DragOver func
@@ -218,16 +241,28 @@ function generateTodo(array) {
 
 		//DragDrop
 		const dragDrop = function () {
-			this.append(taskItem)
+			debugger
+			if (this.parentNode.classList.contains('tasks-board__created')){
+				createdTasksDataArray.push(element)
+				tasksBoardContentCreated.innerHTML = null
+				generateTodo(createdTasksDataArray)
+			} else if (this.parentNode.classList.contains('tasks-board__done')){
+				doneTasksDataArray.push(element)
+				tasksBoardContentDone.innerHTML = null
+				generateTodo(doneTasksDataArray)
+			} else{
+				inProgressTasksDataArray.push(element)
+				tasksBoardContentInProgress.innerHTML = null
+				generateTodo(inProgressTasksDataArray)
+			}
+			array.splice(index,1)
 			this.classList.remove('hovered')
+			generateTodo(array)
 		}
 		//DragDrop
 		tasksBoardContentCreated.addEventListener('drop', dragDrop)
 		tasksBoardContentInProgress.addEventListener('drop', dragDrop)
 		tasksBoardContentDone.addEventListener('drop', dragDrop)
-
-
-
 
 	})
 	taskBoardHeaderCreatedCounter.innerHTML = createdTasksDataArray.length
@@ -302,16 +337,16 @@ deleteTasksButton.addEventListener('click', () => {
 
 
 
-const dragAndDrop = () => {
-	const card = document.querySelector('task-item')
-	const cells = document.querySelectorAll('tasks-board__content')
-	const dragStart = function () {
-		setTimeout(() => {
-			this.classList.add('hide')
-		}, 0);
-	}
-	card.addEventListener('dragstart', dragStart)
-}
+// const dragAndDrop = () => {
+// 	const card = document.querySelector('task-item')
+// 	const cells = document.querySelectorAll('tasks-board__content')
+// 	const dragStart = function () {
+// 		setTimeout(() => {
+// 			this.classList.add('hide')
+// 		}, 0);
+// 	}
+// 	card.addEventListener('dragstart', dragStart)
+// }
 
 
 
