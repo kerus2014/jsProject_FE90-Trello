@@ -1,6 +1,7 @@
 {
 	"name": "hello_vsode",
 	"version": "1.0.0",
+	"source": "index.html",
 	"scripts": {
 		"start": "parcel serve --open",
 		"build": "npm run clean && parcel build --public-url ./ --no-source-maps",

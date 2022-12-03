@@ -70,7 +70,20 @@ const tasksBoardContentCreated = createDiv('tasks-board__content')
 const tasksBoardContentInProgress = createDiv('tasks-board__content')
 const tasksBoardContentDone = createDiv('tasks-board__content')
 
-tasksBoardCreated.append(tasksHeaderCreated, tasksBoardContentCreated)
+const wrapper = createDiv('hidden')
+wrapper.id = 'modalWindowWrapper'
+
+const contentModal = createDiv('modal-window-content')
+//const modalText = openModal()
+
+//contentModal.append(modalText)
+
+//const modalWin = createDiv('modalWin-wrapper')
+// modalWin.id = modal
+
+wrapper.append(contentModal)
+
+tasksBoardCreated.append(tasksHeaderCreated, tasksBoardContentCreated, wrapper)
 tasksBoardInProgress.append(tasksHeaderInProgress, tasksBoardContentInProgress)
 tasksBoardDone.append(tasksHeaderDone, tasksBoardContentDone)
 
@@ -88,12 +101,10 @@ tasksBoardDone.append(deleteTasksButton)
 function generateTodo(array) {
 
 	array.forEach((element, index) => {
-
 		const taskItem = createDiv('task-item')
 		taskItem.setAttribute('draggable', true) //Включил драгбл
 
 		taskItem.id = element.id
-
 
 		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
 			taskItem.className += ' tasksCreated-color'
@@ -149,6 +160,10 @@ function generateTodo(array) {
 		}
 
 		taskItemSlideButton.addEventListener('click', () => {
+			if (inProgressTasksDataArray.length == 4) {
+				handleAlertModal()
+				return
+			}
 			inProgressTasksDataArray.push(element)
 			createdTasksDataArray.splice(index, 1)
 			tasksBoardContentCreated.innerHTML = null
@@ -187,7 +202,7 @@ function generateTodo(array) {
 			}
 		})
 
-		function openEditTaskItemModalWindow () {
+		function openEditTaskItemModalWindow() {
 			const modalWindow = createDiv('modal-window')
 			document.body.append(modalWindow)
 
@@ -223,9 +238,9 @@ function generateTodo(array) {
 			userOptionsArray.push(taskItemSelectUserItem1)
 
 			console.log(userOptionsArray);
-			
-			userOptionsArray.forEach(el =>{
-				if(el.value === element.user){
+
+			userOptionsArray.forEach(el => {
+				if (el.value === element.user) {
 					el.selected = true
 				}
 			})
@@ -342,6 +357,31 @@ function generateTodo(array) {
 
 }
 
+function handleAlertModal() {
+	const alertModalWindow = createDiv('modal-window')
+
+	const alertModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+
+	const alertModalText = document.createElement('p')
+	alertModalText.className = 'task-item__text'
+	alertModalText.innerHTML = 'Complete current tasks in progress column, until add new task'
+
+	const alertModalButtonConfirm = createInput('button task-item__button', 'submit', 'Confirm')
+
+	document.body.append(alertModalWindow)
+	document.body.append(alertModalContainer)
+	alertModalContainer.appendChild(alertModalText)
+	alertModalContainer.appendChild(alertModalButtonConfirm)
+
+	alertModalButtonConfirm.addEventListener('click', () => {
+		alertModalContainer.remove()
+		alertModalWindow.remove()
+	})
+}
+
+
+
+
 function taskForm() {
 
 	const taskItem = createDiv('task-item')
@@ -397,11 +437,52 @@ function taskForm() {
 
 addTaskButton.addEventListener('click', taskForm)
 
-deleteTasksButton.addEventListener('click', () => {
-	doneTasksDataArray.splice(0)
-	tasksBoardContentDone.innerHTML = null
-	generateTodo(doneTasksDataArray)
-})
+
+
+function handleDeleteAllCards() {
+
+	if (doneTasksDataArray.length == 0) return
+	const deleteModalWindow = createDiv('modal-window')
+
+	const deleteModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+
+	const deleteModalText = document.createElement('p')
+	deleteModalText.className = 'task-item__text'
+	deleteModalText.innerHTML = 'Are you sure to delete all done cards?'
+
+	const deleteModalButtonCancel = createInput('button task-item__button', 'button', 'Cancel')
+	const deleteModalButtonConfirm = createInput('button task-item__button', 'submit', 'Confirm')
+
+	document.body.append(deleteModalWindow)
+	document.body.append(deleteModalContainer)
+	deleteModalContainer.appendChild(deleteModalText)
+	deleteModalContainer.append(deleteModalButtonCancel, deleteModalButtonConfirm)
+
+	deleteModalButtonConfirm.addEventListener('click', () => {
+		doneTasksDataArray.splice(0)
+		tasksBoardContentDone.innerHTML = null
+		generateTodo(doneTasksDataArray)
+		deleteModalWindow.remove()
+		deleteModalContainer.remove()
+	})
+
+	deleteModalButtonCancel.addEventListener('click', () => {
+		deleteModalWindow.remove()
+		deleteModalContainer.remove()
+	})
+}
+
+
+//Наверное можно проще
+setInterval(() => {
+	if (doneTasksDataArray.length == 0) {
+		deleteTasksButton.classList.add('disabled')
+	} else { deleteTasksButton.classList.remove('disabled') }
+}, 0);
+
+
+
+deleteTasksButton.addEventListener('click', handleDeleteAllCards)
 
 
 //localStorage
