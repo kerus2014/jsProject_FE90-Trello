@@ -4,7 +4,8 @@
 	"source": "index.html",
 	"scripts": {
 		"start": "parcel serve --open",
-		"build": "parcel build"
+		"build": "npm run clean && parcel build --public-url ./ --no-source-maps",
+		"clean": "rimraf dist"
 	},
 	"keywords": [],
 	"author": "",
@@ -15,6 +16,5 @@
 		"rimraf": "^3.0.2",
 		"sass": "^1.54.5"
 	},
-	"dependencies": {},
 	"description": ""
 }
