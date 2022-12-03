@@ -35,15 +35,15 @@ tasks.append(tasksContainer)
 tasksContainer.append(tasksBoardCreated, tasksBoardInProgress, tasksBoardDone)
 
 const tasksHeaderCreated = createDiv('tasks-board__header tasks-board__header_created')
-const taskBoardHeaderCreatedTitle =  createDiv('tasks-board__header-title','Created:')
+const taskBoardHeaderCreatedTitle = createDiv('tasks-board__header-title', 'Created:')
 const taskBoardHeaderCreatedCounter = createDiv('tasks-board__header-counter', createdTasksDataArray.length)
 
 const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress',)
-const tasksHeaderInProgressTitle =  createDiv('tasks-board__header-title','IN PROGRESS:')
+const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'IN PROGRESS:')
 const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter', inProgressTasksDataArray.length)
 
 const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done')
-const tasksHeaderDoneTitle =  createDiv('tasks-board__header-title','DONE:')
+const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'DONE:')
 const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter', doneTasksDataArray.length)
 
 const tasksBoardContentCreated = createDiv('tasks-board__content')
@@ -63,15 +63,15 @@ const contentModal = createDiv('modal-window-content')
 
 wrapper.append(contentModal)
 
-tasksBoardCreated.append(tasksHeaderCreated,tasksBoardContentCreated, wrapper)
-tasksBoardInProgress.append(tasksHeaderInProgress,tasksBoardContentInProgress)
-tasksBoardDone.append(tasksHeaderDone,tasksBoardContentDone)
+tasksBoardCreated.append(tasksHeaderCreated, tasksBoardContentCreated, wrapper)
+tasksBoardInProgress.append(tasksHeaderInProgress, tasksBoardContentInProgress)
+tasksBoardDone.append(tasksHeaderDone, tasksBoardContentDone)
 
 tasksHeaderCreated.append(taskBoardHeaderCreatedTitle, taskBoardHeaderCreatedCounter)
-tasksHeaderInProgress.append(tasksHeaderInProgressTitle,tasksHeaderInProgressCounter)
-tasksHeaderDone.append(tasksHeaderDoneTitle,tasksHeaderDoneCounter)
+tasksHeaderInProgress.append(tasksHeaderInProgressTitle, tasksHeaderInProgressCounter)
+tasksHeaderDone.append(tasksHeaderDoneTitle, tasksHeaderDoneCounter)
 
-const addTaskButton = createButton('button tasks-board__addTaskButton',`+ Add todo`)
+const addTaskButton = createButton('button tasks-board__addTaskButton', `+ Add todo`)
 tasksBoardCreated.append(addTaskButton)
 
 const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton', 'Delete All')
@@ -80,17 +80,17 @@ tasksBoardDone.append(deleteTasksButton)
 //TodoCard elements
 function generateTodo(array) {
 
-	array.forEach((element,index) => {
+	array.forEach((element, index) => {
 		const taskItem = createDiv('task-item')
 		taskItem.id = element.id
 
-		if(JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
 			taskItem.className += ' tasksCreated-color'
 			tasksBoardContentCreated.append(taskItem)
-		} else if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)){
+		} else if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)) {
 			tasksBoardContentInProgress.append(taskItem)
 			taskItem.className += ' tasksInProgress-color'
-		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
 			tasksBoardContentDone.append(taskItem)
 			taskItem.className += ' tasksDone-color'
 		}
@@ -110,17 +110,17 @@ function generateTodo(array) {
 		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header', 'button', 'delete')
 		taskItemButtonDelete.id = 'taskItemButtonDelete'
 
-		const taskItemButtonBack = createInput('button task-item__button task-item__button_header','button','back')
+		const taskItemButtonBack = createInput('button task-item__button task-item__button_header', 'button', 'back')
 		taskItemButtonBack.id = 'taskItemButtonBack'
 
-		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header','button','complete')
+		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header', 'button', 'complete')
 		taskItemButtonComplete.id = 'taskItemButtonComplete'
 
-		if(JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)){
-			taskItemButtons.append(taskItemButtonBack,taskItemButtonComplete)
-		} else if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
-			taskItemButtons.append(taskItemButtonEdit,taskItemButtonDelete)
-		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
+		if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)) {
+			taskItemButtons.append(taskItemButtonBack, taskItemButtonComplete)
+		} else if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+			taskItemButtons.append(taskItemButtonEdit, taskItemButtonDelete)
+		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
 			taskItemButtons.append(taskItemButtonDelete)
 		}
 
@@ -130,34 +130,38 @@ function generateTodo(array) {
 		const taskItemDescriptionText = createDiv('task-item__description-text', element.description)
 		taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
-		const taskItemSlideButton = createInput('task-item__slide-button','button','>')
-		
+		const taskItemSlideButton = createInput('task-item__slide-button', 'button', '>')
 
-		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
+
+		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
 			taskItemDescriptionContainer.appendChild(taskItemSlideButton)
 		}
 
 		taskItemSlideButton.addEventListener('click', () => {
+			if (inProgressTasksDataArray.length == 4) {
+				handleAlertModal()
+				return
+			}
 			inProgressTasksDataArray.push(element)
-			createdTasksDataArray.splice(index,1)
+			createdTasksDataArray.splice(index, 1)
 			tasksBoardContentCreated.innerHTML = null
 			tasksBoardContentInProgress.innerHTML = null
 			generateTodo(inProgressTasksDataArray)
 			generateTodo(createdTasksDataArray)
 		})
 
-		taskItemButtonBack.addEventListener('click',() => {
+		taskItemButtonBack.addEventListener('click', () => {
 			createdTasksDataArray.push(element)
-			inProgressTasksDataArray.splice(index,1)
+			inProgressTasksDataArray.splice(index, 1)
 			tasksBoardContentCreated.innerHTML = null
 			tasksBoardContentInProgress.innerHTML = null
 			generateTodo(inProgressTasksDataArray)
 			generateTodo(createdTasksDataArray)
-		} )
+		})
 
 		taskItemButtonComplete.addEventListener('click', () => {
 			doneTasksDataArray.push(element)
-			inProgressTasksDataArray.splice(index,1)
+			inProgressTasksDataArray.splice(index, 1)
 			tasksBoardContentDone.innerHTML = null
 			tasksBoardContentInProgress.innerHTML = null
 			generateTodo(inProgressTasksDataArray)
@@ -165,18 +169,18 @@ function generateTodo(array) {
 		})
 
 		taskItemButtonDelete.addEventListener('click', () => {
-			if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)){
-				createdTasksDataArray.splice(index,1)
+			if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
+				createdTasksDataArray.splice(index, 1)
 				tasksBoardContentCreated.innerHTML = null
 				generateTodo(createdTasksDataArray)
-			} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)){
-				doneTasksDataArray.splice(index,1)
+			} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
+				doneTasksDataArray.splice(index, 1)
 				tasksBoardContentDone.innerHTML = null
 				generateTodo(doneTasksDataArray)
 			}
 		})
 
-		function openEditTaskItemModalWindow () {
+		function openEditTaskItemModalWindow() {
 			const modalWindow = createDiv('modal-window')
 			document.body.append(modalWindow)
 
@@ -212,9 +216,9 @@ function generateTodo(array) {
 			userOptionsArray.push(taskItemSelectUserItem1)
 
 			console.log(userOptionsArray);
-			
-			userOptionsArray.forEach(el =>{
-				if(el.value === element.user){
+
+			userOptionsArray.forEach(el => {
+				if (el.value === element.user) {
 					el.selected = true
 				}
 			})
@@ -261,6 +265,31 @@ function generateTodo(array) {
 	tasksHeaderDoneCounter.innerHTML = doneTasksDataArray.length
 	//TodoCard elements
 }
+
+function handleAlertModal() {
+	const alertModalWindow = createDiv('modal-window')
+
+	const alertModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+
+	const alertModalText = document.createElement('p')
+	alertModalText.className = 'task-item__text'
+	alertModalText.innerHTML = 'Complete current tasks in progress column, until add new task'
+
+	const alertModalButtonConfirm = createInput('button task-item__button', 'submit', 'Confirm')
+
+	document.body.append(alertModalWindow)
+	document.body.append(alertModalContainer)
+	alertModalContainer.appendChild(alertModalText)
+	alertModalContainer.appendChild(alertModalButtonConfirm)
+
+	alertModalButtonConfirm.addEventListener('click', () => {
+		alertModalContainer.remove()
+		alertModalWindow.remove()
+	})
+}
+
+
+
 
 function taskForm() {
 
@@ -316,11 +345,52 @@ function taskForm() {
 
 addTaskButton.addEventListener('click', taskForm)
 
-deleteTasksButton.addEventListener('click', () => {
-	doneTasksDataArray.splice(0)
-	tasksBoardContentDone.innerHTML = null
-	generateTodo(doneTasksDataArray)
-})
+
+
+function handleDeleteAllCards() {
+
+	if (doneTasksDataArray.length == 0) return
+	const deleteModalWindow = createDiv('modal-window')
+
+	const deleteModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+
+	const deleteModalText = document.createElement('p')
+	deleteModalText.className = 'task-item__text'
+	deleteModalText.innerHTML = 'Are you sure to delete all done cards?'
+
+	const deleteModalButtonCancel = createInput('button task-item__button', 'button', 'Cancel')
+	const deleteModalButtonConfirm = createInput('button task-item__button', 'submit', 'Confirm')
+
+	document.body.append(deleteModalWindow)
+	document.body.append(deleteModalContainer)
+	deleteModalContainer.appendChild(deleteModalText)
+	deleteModalContainer.append(deleteModalButtonCancel, deleteModalButtonConfirm)
+
+	deleteModalButtonConfirm.addEventListener('click', () => {
+		doneTasksDataArray.splice(0)
+		tasksBoardContentDone.innerHTML = null
+		generateTodo(doneTasksDataArray)
+		deleteModalWindow.remove()
+		deleteModalContainer.remove()
+	})
+
+	deleteModalButtonCancel.addEventListener('click', () => {
+		deleteModalWindow.remove()
+		deleteModalContainer.remove()
+	})
+}
+
+
+//Наверное можно проще
+setInterval(() => {
+	if (doneTasksDataArray.length == 0) {
+		deleteTasksButton.classList.add('disabled')
+	} else { deleteTasksButton.classList.remove('disabled') }
+}, 0);
+
+
+
+deleteTasksButton.addEventListener('click', handleDeleteAllCards)
 
 
 //localStorage
