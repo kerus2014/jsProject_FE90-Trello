@@ -22,13 +22,33 @@ function createInput(inputClassName, inputType,inputValue = null){
 	return inputName
 }
 
+let createdTasksDataArray = []
+let inProgressTasksDataArray = []
+let doneTasksDataArray = []
+let usersArray = []
+
 const header = document.querySelector('.header')
 const headerContainer = document.querySelector('.header__container')
-const headerLogo = createDiv('header__logo', 'Trello')
+const headerTitle = createDiv('header__title', 'Tasks on this week')
+const headerLeftContent = createDiv('header__left-content')
+const allUsers = createDiv('header__all-users')
+const buttonAddUser = createButton('header__add-user button', '+ Add participant') 
+headerLeftContent.append(headerTitle, allUsers)
+fetch("https://638cd7acd2fc4a058a618bc5.mockapi.io/users")
+		.then(response => response.json())
+		.then(response => {
+			usersArray = response
+			usersArray.forEach(el => {
+				const user = createDiv('header__user')
+				user.style.background = `url(${el.avatar})`
+				allUsers.append(user)
+			})
+			allUsers.append(buttonAddUser)
+			})
 const headerClock = createDiv('header__clock')
 headerClock.id = 'clock'
 
-headerContainer.append(headerLogo, headerClock)
+headerContainer.append(headerLeftContent,headerClock)
 
 function clockFun() {
 	let date = new Date(),
@@ -48,9 +68,7 @@ const tasksBoardDone = createDiv('tasks-board tasks-board__done')
 
 //Array
 
-let createdTasksDataArray = []
-let inProgressTasksDataArray = []
-let doneTasksDataArray = []
+
 
 tasks.append(tasksContainer)
 tasksContainer.append(tasksBoardCreated, tasksBoardInProgress, tasksBoardDone)
@@ -60,11 +78,11 @@ const taskBoardHeaderCreatedTitle = createDiv('tasks-board__header-title', 'Crea
 const taskBoardHeaderCreatedCounter = createDiv('tasks-board__header-counter', createdTasksDataArray.length)
 
 const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress',)
-const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'IN PROGRESS:')
+const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'In progress:')
 const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter', inProgressTasksDataArray.length)
 
 const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done')
-const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'DONE:')
+const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'Done:')
 const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter', doneTasksDataArray.length)
 const tasksBoardContentCreated = createDiv('tasks-board__content')
 const tasksBoardContentInProgress = createDiv('tasks-board__content')
@@ -96,14 +114,13 @@ tasksBoardCreated.append(addTaskButton)
 
 const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton', 'Delete All')
 tasksBoardDone.append(deleteTasksButton)
-
 //TodoCard elements
 function generateTodo(array) {
 
 	array.forEach((element, index) => {
 		const taskItem = createDiv('task-item')
 		taskItem.setAttribute('draggable', true) //Включил драгбл
-
+		
 		taskItem.id = element.id
 
 		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
@@ -210,12 +227,12 @@ function generateTodo(array) {
 			taskItem.className += ' tasksCreated-color'
 			document.body.append(taskItem)
 
-			const taskItemTitleText = createInput('task-item__input-title', 'text')
+			const taskItemTitleText = createInput('task-item__input-title task-item__form-input', 'text')
 			taskItemTitleText.value = element.title // = .value in future
 			taskItem.appendChild(taskItemTitleText)
 
 			const taskItemDescriptionTextarea = document.createElement('textarea')
-			taskItemDescriptionTextarea.className = 'button task-item__textarea'
+			taskItemDescriptionTextarea.className = 'button task-item__textarea task-item__form-input'
 			taskItemDescriptionTextarea.value = element.description // = .value in future
 			taskItem.appendChild(taskItemDescriptionTextarea)
 
@@ -223,28 +240,14 @@ function generateTodo(array) {
 			taskItem.appendChild(taskItemFooter)
 
 			const taskItemSelectUser = document.createElement('select')
-			taskItemSelectUser.className = 'task-item__select-user'
+			taskItemSelectUser.className = 'task-item__select-user task-item__form-input'
 			taskItemFooter.appendChild(taskItemSelectUser)
 
-			let userOptionsArray = []
-
-			const taskItemSelectUserItem1 = document.createElement('option')
-			taskItemSelectUserItem1.innerHTML = 'user1'
-			taskItemSelectUserItem1.value = 'user1'
-			userOptionsArray.push(taskItemSelectUserItem1)
-			const taskItemSelectUserItem2 = document.createElement('option')
-			taskItemSelectUserItem2.innerHTML = 'user2'
-			taskItemSelectUserItem2.value = 'user2'
-			userOptionsArray.push(taskItemSelectUserItem1)
-
-			console.log(userOptionsArray);
-
-			userOptionsArray.forEach(el => {
-				if (el.value === element.user) {
-					el.selected = true
-				}
+			usersArray.forEach(el => {
+				let taskItemSelectUserItem = document.createElement('option')
+				taskItemSelectUserItem.innerHTML = el.name
+				taskItemSelectUser.append(taskItemSelectUserItem)
 			})
-			taskItemSelectUser.append(taskItemSelectUserItem1, taskItemSelectUserItem2)
 
 			const taskItemButtons = createDiv('task-item__buttons-container')
 			taskItemFooter.append(taskItemButtons)
@@ -275,8 +278,14 @@ function generateTodo(array) {
 		taskItem.appendChild(taskItemFooter)
 
 		const taskItemUser = createDiv('task-item__user')
-		taskItemUser.innerHTML = element.user // = ...value in future
 		taskItemFooter.appendChild(taskItemUser)
+		usersArray.forEach(el =>{
+				if (el.name == element.user){
+					taskItemUser.style.background = `url(${el.avatar})` // = ...value in future
+				}
+				
+			})
+		
 
 		const taskItemTime = createDiv('task-item__date')
 		taskItemTime.innerHTML = element.date
@@ -354,7 +363,15 @@ function generateTodo(array) {
 	tasksHeaderDoneCounter.innerHTML = doneTasksDataArray.length
 	//TodoCard elements
 	// const cells = document.querySelectorAll('tasks-board__content')
-
+	if (tasksBoardContentCreated.innerHTML == null){
+		tasksBoardContentCreated.innerHTML = 'NO TASKS'
+	}
+	if (tasksBoardContentInProgress.innerHTML == null){
+		tasksBoardContentInProgress.innerHTML = 'NO TASKS'
+	}
+	if (tasksBoardContentDone.innerHTML == null){
+		tasksBoardContentDone.innerHTML = 'NO TASKS'
+	}
 }
 
 function handleAlertModal() {
@@ -388,12 +405,12 @@ function taskForm() {
 	taskItem.className += ' tasksCreated-color'
 	tasksBoardContentCreated.appendChild(taskItem)
 
-	const taskItemTitleText = createInput('task-item__input-title', 'text')
+	const taskItemTitleText = createInput('task-item__input-title task-item__form-input', 'text')
 	taskItemTitleText.placeholder = 'Title' // = .value in future
 	taskItem.appendChild(taskItemTitleText)
 
 	const taskItemDescriptionTextarea = document.createElement('textarea')
-	taskItemDescriptionTextarea.className = 'button task-item__textarea'
+	taskItemDescriptionTextarea.className = 'button task-item__textarea task-item__form-input'
 	taskItemDescriptionTextarea.innerHTML = '' // = .value in future
 	taskItem.appendChild(taskItemDescriptionTextarea)
 
@@ -401,15 +418,15 @@ function taskForm() {
 	taskItem.appendChild(taskItemFooter)
 
 	const taskItemSelectUser = document.createElement('select')
-	taskItemSelectUser.className = 'task-item__select-user'
+	taskItemSelectUser.className = 'task-item__select-user task-item__form-input'
 	taskItemFooter.appendChild(taskItemSelectUser)
 
-	const taskItemSelectUserItem1 = document.createElement('option')
-	taskItemSelectUserItem1.innerHTML = 'user1'
-	const taskItemSelectUserItem2 = document.createElement('option')
-	taskItemSelectUserItem2.innerHTML = 'user2'
-	taskItemSelectUser.append(taskItemSelectUserItem1, taskItemSelectUserItem2)
-
+	usersArray.forEach(el => {
+		let taskItemSelectUserItem = document.createElement('option')
+		taskItemSelectUserItem.innerHTML = el.name
+		taskItemSelectUser.append(taskItemSelectUserItem)
+	})
+	
 	const taskItemButtons = createDiv('task-item__buttons-container')
 	taskItemFooter.append(taskItemButtons)
 
@@ -432,7 +449,7 @@ function taskForm() {
 		generateTodo(createdTasksDataArray)
 
 	})
-	return taskData
+	// return taskData
 }
 
 addTaskButton.addEventListener('click', taskForm)

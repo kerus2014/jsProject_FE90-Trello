@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Cardo:wght@700&family=Open+Sans:ital,wght@0,700;1,400&family=Raleway:wght@500&family=Roboto+Condensed:ital,wght@1,300;1,400;1,700&display=swap');
-@import './components/variables.scss';
+@import './components/fonts.scss';
 @import './components/mixin.scss';
+@import './components/variables.scss';
 @import './modalWin.scss';
 
 * {
@@ -11,6 +11,7 @@
 
 body {
 	background: $backgroundColor;
+	@include font;
 }
 
 .container {
@@ -24,11 +25,13 @@ body {
 }
 
 .header {
-	width: 100%;
-	background: #6838A6;
+	padding: 20px;
 
 	&__container {
+		box-shadow: 0px 8px 24px rgba(129, 135, 189, 0.02);
 		padding-top: 16px;
+		border-radius: 16px;
+		background: $cardsColor;
 		padding-bottom: 16px;
 		height: fit-content;
 		margin: auto;
@@ -41,10 +44,10 @@ body {
 		}
 	}
 
-	&__logo {
-		font-family: open sans;
-		color: $fontsColorDarkBckg;
-		font-size: 24px;
+	&__title {
+		@include Font-bold;
+		color: $fontsColor;
+		font-size: 28px;
 
 		@media (max-width: 824px) {
 			font-size: 35px;
@@ -52,12 +55,44 @@ body {
 		}
 	}
 
+	&__all-users{
+		display: flex;
+		margin-top: 10px;
+		align-items: center;
+		// width: calc(fit-content - 10px);
+	}
+
+	&__user{
+		width: 40px;
+		height: 40px;
+		background-color: grey;
+		background-repeat: no-repeat;
+		border-radius:100%;
+		background-size: cover;
+		background-position: center center;
+		border: 4px solid;
+		border-color: white;
+	}
+
+	&__user+&__user{
+		position: relative;
+		left: -15px;
+		margin-right: -15px;
+	}
+
+	&__add-user{
+			margin-left: 16px;
+			background-color: $primaryBackground;
+			color: $primaryColor;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-weight: 700;
+	}
+
 	&__clock {
-		@include Roberto-700();
+		@include Font-bold();
 		font-size: 18px;
-		border-radius: 12px;
-		padding: 10px 20px;
-		background: rgb(245, 226, 250);
 
 		@media (max-width: 824px) {
 			font-size: 30px;
@@ -87,8 +122,6 @@ body {
 .tasks-board {
 	@include styleForms();
 	overflow: hidden;
-	background-color: #efefef;
-
 	&__created {}
 
 	&__inProgress {}
@@ -96,44 +129,45 @@ body {
 	&__done {}
 
 	&__header {
+		font-weight: 700;
 		width: 100%;
-		padding: 10px 30px;
+		padding: 10px 16px;
 		color: black;
-		font-family: open sans;
 		font-size: 18px;
 		display: flex;
 		justify-content: space-between;
 
-		&__header-title {
-			text-transform: capitalize;
-		}
-
 		&_created {
-			background-color: #C34D65;
+			color: $colorCreated;
 		}
 
 		&_inProgress {
-			background-color: #93C6de;
+			color: $colorInProgress;
 		}
 
 		&_done {
-			background-color: #8BDBAD;
+			color: $colorDone;
 		}
+	}
+
+	&__header-title {
+		text-transform: capitalize;
 	}
 
 	&__content {
 		width: 100%;
 		text-align: center;
-		padding: 16px;
-		min-height: 200px; //Времено
+		padding: 16px 0px;
+		// min-height: 200px; //Времено
 	}
 
 	&__addTaskButton,
 	&__deleteAllTasksButton {
 		cursor: pointer;
-		background-color: #C34D65;
+		background-color: $primaryBackground;
+		border-radius: 10px;
 		border: none;
-		color: black;
+		color: $primaryColor;
 		width: 100%;
 		padding: 10px;
 		font-size: 18px;
@@ -141,13 +175,15 @@ body {
 	}
 
 	&__deleteAllTasksButton {
-		background-color: #8BDBAD;
+		background-color: #fff2f6;
+		color: #ff76a1;
 	}
 }
 
 .task-item {
 	// margin: 20px;
-	background-color: rgba(53, 204, 204, 0.767);
+	background-color: $cardsColor;
+	box-shadow: 0px 8px 24px rgba(129, 135, 189, 0.02);
 	padding: 16px;
 	border-radius: 8px;
 	height: fit-content;
@@ -166,24 +202,39 @@ body {
 		font-weight: 700;
 	}
 
+	&__form-input{
+		background-color: #F7f7f7;
+		color: #adadad;
+		@include font;
+	}
+
 	&__input-title {
 		width: 100%;
-		border-radius: 2px;
-		padding: 5px;
+		border-radius: 4px;
+		font-size: 16px;
+		padding: 5px 8px;
 		border: 0px solid;
 		margin-bottom: 16px;
 		cursor: pointer;
+		&:focus{
+			border-color: green;
+		}
 	}
 
 	&__textarea {
-		@include Roberto-400();
 		width: 100%;
-		font-size: 18px;
+		font-size: 16px;
 		border: none;
-		border-radius: 3px;
-		padding: 5px;
+		border-radius: 4px;
+		padding: 5px 8px;
 		max-height: 400px;
+
+		&:focus{
+			border-color: green;
+		}
 	}
+
+
 
 	&__description-container {
 		display: flex;
@@ -203,14 +254,32 @@ body {
 		min-height: 50px;
 		padding: 5px;
 		margin-left: 10px;
+		border: none;
 	}
 
 	&__footer {
 		display: flex;
 		justify-content: space-between;
-		@include Roberto-400();
-		font-size: 20px;
+		align-items: center;
 		margin-top: 16px;
+		
+	}
+
+	&__left-content{
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__user {
+		width: 30px;
+		height: 30px;
+		background-color: grey;
+		background-repeat: no-repeat;
+		border-radius:100%;
+		background-size: cover;
+		background-position: center center;
+		border: 2px solid;
+		border-color: white;
 	}
 
 	&__select-user {
@@ -221,6 +290,11 @@ body {
 		padding: 5px;
 	}
 
+	&__date{
+		@include Font-bold;
+		font-size: 14px;
+	}
+
 	&__buttons-container {
 		display: flex;
 	}
@@ -229,6 +303,7 @@ body {
 		padding: 5px 10px;
 		border-radius: 3px;
 		border: none;
+		@include font;
 
 		&_header {
 			height: fit-content;
@@ -247,19 +322,19 @@ body {
 	background-color: #d1d8e2;
 }
 .tasksCreated-color{
-	background-color:#C34D65;
+	background-color:$cardsColor;
 }	
 
 .tasksInProgress-color{
-	background-color:#93C6de; 
+	background-color:$cardsColor; 
 }
 
 .tasksInProgress-color {
-	background-color: #93C6de;
+	background-color:$cardsColor;
 }
 
 .tasksDone-color {
-	background-color: #8BDBAD;
+	background-color:$cardsColor;
 }
 
 .task-item+.task-item {
@@ -302,7 +377,8 @@ body {
 }
 
 .disabled {
-	background-color: #3a5a48;
-	opacity: 0.5;
+	background-color: #F7f7f7;
+	opacity: 1;
+	color: #adadad;
 	cursor: auto;
 }
