@@ -114,11 +114,14 @@ tasksBoardCreated.append(addTaskButton)
 
 const deleteTasksButton = createButton('button tasks-board__deleteAllTasksButton', 'Delete All')
 tasksBoardDone.append(deleteTasksButton)
+
 //TodoCard elements
 function generateTodo(array) {
 
 	array.forEach((element, index) => {
 		const taskItem = createDiv('task-item')
+		const taskItemMask = createDiv('task-item__mask')
+		taskItem.append(taskItemMask)
 		// taskItem.setAttribute('draggable', true) //Включил драгбл
 		
 		taskItem.id = element.id
@@ -181,6 +184,8 @@ function generateTodo(array) {
 
 		taskItemButtonMore.addEventListener('click', () => {
 			taskItemButtonsInMore.classList.toggle('show')
+			taskItemButtonMore.classList.toggle('task-item__button-more_bottom-border90')
+			taskItemMask.classList.toggle('task-item__mask_show')
 		})
 
 		taskItemSlideButton.addEventListener('click', () => {
@@ -267,6 +272,8 @@ function generateTodo(array) {
 				taskItem.remove()
 				modalWindow.remove()
 				taskItemButtonsInMore.classList.remove('show')
+				taskItemButtonMore.classList.remove('task-item__button-more_bottom-border90')
+				taskItemMask.classList.remove('task-item__mask_show')
 			})
 
 			taskItemConfirmButton.addEventListener('click', () => {
@@ -310,87 +317,80 @@ function generateTodo(array) {
 		taskItemTime.innerHTML = element.date
 		taskItemFooter.appendChild(taskItemTime)
 
-		//Drag start drag end
-		const dragStart = function () {
-			// setTimeout(() => {
-			// 	taskItem.classList.add('hide')	
-			// }, 0);
-			console.log(element.id);
-		}
-		const dragEnd = function () {
-			// taskItem.classList.remove('hide')
-		}
-		taskItem.addEventListener('dragstart', dragStart)
-		// taskItem.addEventListener('dragend', dragEnd)
-		//Drag start drag end
+	// 	//Drag start drag end
+	// 	const dragStart = function () {
+	// 		// setTimeout(() => {
+	// 		// 	taskItem.classList.add('hide')	
+	// 		// }, 0);
+	// 		console.log(element.id);
+	// 	}
+	// 	const dragEnd = function () {
+	// 		// taskItem.classList.remove('hide')
+	// 	}
+	// 	taskItem.addEventListener('dragstart', dragStart)
+	// 	// taskItem.addEventListener('dragend', dragEnd)
+	// 	//Drag start drag end
 
-		//DragOver func
-		const dragOver = function (event) {
-			event.preventDefault()
-		}
-		//DragOver func
-		tasksBoardContentCreated.addEventListener('dragover', dragOver)
-		tasksBoardContentInProgress.addEventListener('dragover', dragOver)
-		tasksBoardContentDone.addEventListener('dragover', dragOver)
-		//DragEnter
-		const dragEnter = function (event) {
-			event.preventDefault()
-			this.classList.add('hovered')
-		}
-		//DragEnter
-		tasksBoardContentCreated.addEventListener('dragenter', dragEnter)
-		tasksBoardContentInProgress.addEventListener('dragenter', dragEnter)
-		tasksBoardContentDone.addEventListener('dragenter', dragEnter)
+	// 	//DragOver func
+	// 	const dragOver = function (event) {
+	// 		event.preventDefault()
+	// 	}
+	// 	//DragOver func
+	// 	tasksBoardContentCreated.addEventListener('dragover', dragOver)
+	// 	tasksBoardContentInProgress.addEventListener('dragover', dragOver)
+	// 	tasksBoardContentDone.addEventListener('dragover', dragOver)
+	// 	//DragEnter
+	// 	const dragEnter = function (event) {
+	// 		event.preventDefault()
+	// 		this.classList.add('hovered')
+	// 	}
+	// 	//DragEnter
+	// 	tasksBoardContentCreated.addEventListener('dragenter', dragEnter)
+	// 	tasksBoardContentInProgress.addEventListener('dragenter', dragEnter)
+	// 	tasksBoardContentDone.addEventListener('dragenter', dragEnter)
 
-		//DragLeave
-		const dragLeave = function () {
-			this.classList.remove('hovered')
-		}
-		//DragLeave
-		tasksBoardContentCreated.addEventListener('dragleave', dragLeave)
-		tasksBoardContentInProgress.addEventListener('dragleave', dragLeave)
-		tasksBoardContentDone.addEventListener('dragleave', dragLeave)
+	// 	//DragLeave
+	// 	const dragLeave = function () {
+	// 		this.classList.remove('hovered')
+	// 	}
+	// 	//DragLeave
+	// 	tasksBoardContentCreated.addEventListener('dragleave', dragLeave)
+	// 	tasksBoardContentInProgress.addEventListener('dragleave', dragLeave)
+	// 	tasksBoardContentDone.addEventListener('dragleave', dragLeave)
 
-		//DragDrop
-		const dragDrop = function () {
-			debugger
-			if (this.parentNode.classList.contains('tasks-board__created')){
-				createdTasksDataArray.push(element)
-				tasksBoardContentCreated.innerHTML = null
-				generateTodo(createdTasksDataArray)
-			} else if (this.parentNode.classList.contains('tasks-board__done')){
-				doneTasksDataArray.push(element)
-				tasksBoardContentDone.innerHTML = null
-				generateTodo(doneTasksDataArray)
-			} else{
-				inProgressTasksDataArray.push(element)
-				tasksBoardContentInProgress.innerHTML = null
-				generateTodo(inProgressTasksDataArray)
-			}
-			array.splice(index,1)
-			this.classList.remove('hovered')
-			generateTodo(array)
-		}
-		//DragDrop
-		tasksBoardContentCreated.addEventListener('drop', dragDrop)
-		tasksBoardContentInProgress.addEventListener('drop', dragDrop)
-		tasksBoardContentDone.addEventListener('drop', dragDrop)
+	// 	//DragDrop
+	// 	const dragDrop = function () {
+	// 		debugger
+	// 		if (this.parentNode.classList.contains('tasks-board__created')){
+	// 			createdTasksDataArray.push(element)
+	// 			tasksBoardContentCreated.innerHTML = null
+	// 			generateTodo(createdTasksDataArray)
+	// 		} else if (this.parentNode.classList.contains('tasks-board__done')){
+	// 			doneTasksDataArray.push(element)
+	// 			tasksBoardContentDone.innerHTML = null
+	// 			generateTodo(doneTasksDataArray)
+	// 		} else{
+	// 			inProgressTasksDataArray.push(element)
+	// 			tasksBoardContentInProgress.innerHTML = null
+	// 			generateTodo(inProgressTasksDataArray)
+	// 		}
+	// 		array.splice(index,1)
+	// 		this.classList.remove('hovered')
+	// 		generateTodo(array)
+	// 	}
+	// 	//DragDrop
+	// 	tasksBoardContentCreated.addEventListener('drop', dragDrop)
+	// 	tasksBoardContentInProgress.addEventListener('drop', dragDrop)
+	// 	tasksBoardContentDone.addEventListener('drop', dragDrop)
 
-	})
+	// })
 	taskBoardHeaderCreatedCounter.innerHTML = createdTasksDataArray.length
 	tasksHeaderInProgressCounter.innerHTML = inProgressTasksDataArray.length
 	tasksHeaderDoneCounter.innerHTML = doneTasksDataArray.length
 	//TodoCard elements
 	// const cells = document.querySelectorAll('tasks-board__content')
-	if (tasksBoardContentCreated.innerHTML == null){
-		tasksBoardContentCreated.innerHTML = 'NO TASKS'
-	}
-	if (tasksBoardContentInProgress.innerHTML == null){
-		tasksBoardContentInProgress.innerHTML = 'NO TASKS'
-	}
-	if (tasksBoardContentDone.innerHTML == null){
-		tasksBoardContentDone.innerHTML = 'NO TASKS'
-	}
+	})
+
 }
 
 function handleAlertModal() {
@@ -414,9 +414,6 @@ function handleAlertModal() {
 		alertModalWindow.remove()
 	})
 }
-
-
-
 
 function taskForm() {
 
@@ -484,8 +481,6 @@ function taskForm() {
 
 addTaskButton.addEventListener('click', taskForm)
 
-
-
 function handleDeleteAllCards() {
 
 	if (doneTasksDataArray.length == 0) return
@@ -519,7 +514,6 @@ function handleDeleteAllCards() {
 	})
 }
 
-
 //Наверное можно проще
 setInterval(() => {
 	if (doneTasksDataArray.length == 0) {
@@ -527,27 +521,13 @@ setInterval(() => {
 	} else { deleteTasksButton.classList.remove('disabled') }
 }, 0);
 
-
-
 deleteTasksButton.addEventListener('click', handleDeleteAllCards)
-
 
 //localStorage
 window.addEventListener('beforeunload', function () {
 	localStorage.setItem('task', JSON.stringify(createdTasksDataArray))
 })
 
-
-// const dragAndDrop = () => {
-// 	const card = document.querySelector('task-item')
-// 	const cells = document.querySelectorAll('tasks-board__content')
-// 	const dragStart = function () {
-// 		setTimeout(() => {
-// 			this.classList.add('hide')
-// 		}, 0);
-// 	}
-// 	card.addEventListener('dragstart', dragStart)
-// }
 
 
 
