@@ -234,6 +234,7 @@ function generateTodo(array) {
 		function openEditTaskItemModalWindow() {
 			const modalWindow = createDiv('modal-window')
 			document.body.append(modalWindow)
+			document.body.classList.add('body-noScroll')
 
 			const taskItem = createDiv('task-item modal-window__task-item')
 			taskItem.className += ' tasksCreated-color'
@@ -274,6 +275,7 @@ function generateTodo(array) {
 				taskItemButtonsInMore.classList.remove('show')
 				taskItemButtonMore.classList.remove('task-item__button-more_bottom-border90')
 				taskItemMask.classList.remove('task-item__mask_show')
+				document.body.classList.remove('body-noScroll')
 			})
 
 			taskItemConfirmButton.addEventListener('click', () => {
@@ -287,6 +289,7 @@ function generateTodo(array) {
 					modalWindow.remove()
 					tasksBoardContentCreated.innerHTML = null
 					generateTodo(createdTasksDataArray)
+					document.body.classList.remove('body-noScroll')
 				} else if (taskItemTitleText.value == '' && taskItemDescriptionTextarea.value == ''){
 					taskItemTitleText.classList.add('input-error')
 					taskItemDescriptionTextarea.classList.add('input-error')
