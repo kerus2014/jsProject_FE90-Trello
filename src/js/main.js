@@ -74,16 +74,16 @@ tasks.append(tasksContainer)
 tasksContainer.append(tasksBoardCreated, tasksBoardInProgress, tasksBoardDone)
 
 const tasksHeaderCreated = createDiv('tasks-board__header tasks-board__header_created')
-const taskBoardHeaderCreatedTitle = createDiv('tasks-board__header-title', 'Created:')
+const taskBoardHeaderCreatedTitle = createDiv('tasks-board__header-title', 'Created')
 const taskBoardHeaderCreatedCounter = createDiv('tasks-board__header-counter', createdTasksDataArray.length)
 
 const tasksHeaderInProgress = createDiv('tasks-board__header tasks-board__header_inProgress',)
-const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'In progress:')
-const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter', inProgressTasksDataArray.length)
+const tasksHeaderInProgressTitle = createDiv('tasks-board__header-title', 'In progress')
+const tasksHeaderInProgressCounter = createDiv('tasks-board__header-counter tasks-board__header-counter_inProgress ', inProgressTasksDataArray.length)
 
 const tasksHeaderDone = createDiv('tasks-board__header tasks-board__header_done')
-const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'Done:')
-const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter', doneTasksDataArray.length)
+const tasksHeaderDoneTitle = createDiv('tasks-board__header-title', 'Done')
+const tasksHeaderDoneCounter = createDiv('tasks-board__header-counter tasks-board__header-counter_done', doneTasksDataArray.length)
 const tasksBoardContentCreated = createDiv('tasks-board__content')
 const tasksBoardContentInProgress = createDiv('tasks-board__content')
 const tasksBoardContentDone = createDiv('tasks-board__content')
@@ -119,7 +119,7 @@ function generateTodo(array) {
 
 	array.forEach((element, index) => {
 		const taskItem = createDiv('task-item')
-		taskItem.setAttribute('draggable', true) //Включил драгбл
+		// taskItem.setAttribute('draggable', true) //Включил драгбл
 		
 		taskItem.id = element.id
 
@@ -140,27 +140,30 @@ function generateTodo(array) {
 		const taskItemTitle = createDiv('task-item__title', element.title)
 		taskItemHeader.appendChild(taskItemTitle)
 
-		const taskItemButtons = createDiv('task-item__buttons-container')
-		taskItemHeader.append(taskItemButtons)
+		const taskItemButtonMore = createDiv('task-item__button-more')
+		taskItemHeader.append(taskItemButtonMore)
 
-		const taskItemButtonEdit = createInput('button task-item__button task-item__button_header', 'button', 'edit')
+		const taskItemButtonsInMore = createDiv('task-item__buttons-container task-item__buttons-container_inMore ')
+		taskItemHeader.append(taskItemButtonsInMore)
+
+		const taskItemButtonEdit = createInput('button task-item__button task-item__button_header', 'button', 'Edit')
 		taskItemButtonEdit.id = 'taskItemButtonEdit'
 
-		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header', 'button', 'delete')
+		const taskItemButtonDelete = createInput('button task-item__button task-item__button_header', 'button', 'Delete')
 		taskItemButtonDelete.id = 'taskItemButtonDelete'
 
-		const taskItemButtonBack = createInput('button task-item__button task-item__button_header', 'button', 'back')
+		const taskItemButtonBack = createInput('button task-item__button task-item__button_header', 'button', 'In Created')
 		taskItemButtonBack.id = 'taskItemButtonBack'
 
-		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header', 'button', 'complete')
+		const taskItemButtonComplete = createInput('button task-item__button task-item__button_header', 'button', 'In Done')
 		taskItemButtonComplete.id = 'taskItemButtonComplete'
 
 		if (JSON.stringify(array) === JSON.stringify(inProgressTasksDataArray)) {
-			taskItemButtons.append(taskItemButtonBack, taskItemButtonComplete)
+			taskItemButtonsInMore.append(taskItemButtonBack, taskItemButtonComplete)
 		} else if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
-			taskItemButtons.append(taskItemButtonEdit, taskItemButtonDelete)
+			taskItemButtonsInMore.append(taskItemButtonEdit, taskItemButtonDelete)
 		} else if (JSON.stringify(array) === JSON.stringify(doneTasksDataArray)) {
-			taskItemButtons.append(taskItemButtonDelete)
+			taskItemButtonsInMore.append(taskItemButtonDelete)
 		}
 
 		const taskItemDescriptionContainer = createDiv('task-item__description-container')
@@ -169,12 +172,16 @@ function generateTodo(array) {
 		const taskItemDescriptionText = createDiv('task-item__description-text', element.description)
 		taskItemDescriptionContainer.appendChild(taskItemDescriptionText)
 
-		const taskItemSlideButton = createInput('task-item__slide-button', 'button', '>')
+		const taskItemSlideButton = createInput('button task-item__button task-item__button_header', 'button', 'In Progress')
 
 
 		if (JSON.stringify(array) === JSON.stringify(createdTasksDataArray)) {
-			taskItemDescriptionContainer.appendChild(taskItemSlideButton)
+			taskItemButtonsInMore.appendChild(taskItemSlideButton)
 		}
+
+		taskItemButtonMore.addEventListener('click', () => {
+			taskItemButtonsInMore.classList.toggle('show')
+		})
 
 		taskItemSlideButton.addEventListener('click', () => {
 			if (inProgressTasksDataArray.length == 4) {
@@ -252,23 +259,35 @@ function generateTodo(array) {
 			const taskItemButtons = createDiv('task-item__buttons-container')
 			taskItemFooter.append(taskItemButtons)
 
-			const taskItemCancelButton = createInput('button task-item__button', 'button', 'Cancel')
-			const taskItemConfirmButton = createInput('button task-item__button', 'submit', 'Confirm')
+			const taskItemCancelButton = createInput('button  button__cancel task-item__button', 'button', 'Cancel')
+			const taskItemConfirmButton = createInput('button button__confirm task-item__button', 'submit', 'Confirm')
 			taskItemButtons.append(taskItemCancelButton, taskItemConfirmButton)
 
 			taskItemCancelButton.addEventListener('click', () => {
 				taskItem.remove()
 				modalWindow.remove()
+				taskItemButtonsInMore.classList.remove('show')
 			})
 
 			taskItemConfirmButton.addEventListener('click', () => {
-				element.title = taskItemTitleText.value
-				element.description = taskItemDescriptionTextarea.value
-				element.user = taskItemSelectUser.value
-				taskItem.remove()
-				modalWindow.remove()
-				tasksBoardContentCreated.innerHTML = null
-				generateTodo(createdTasksDataArray)
+				taskItemTitleText.classList.remove('input-error')
+				taskItemDescriptionTextarea.classList.remove('input-error')
+				if(taskItemTitleText.value != '' && taskItemDescriptionTextarea.value != ''){
+					element.title = taskItemTitleText.value
+					element.description = taskItemDescriptionTextarea.value
+					element.user = taskItemSelectUser.value
+					taskItem.remove()
+					modalWindow.remove()
+					tasksBoardContentCreated.innerHTML = null
+					generateTodo(createdTasksDataArray)
+				} else if (taskItemTitleText.value == '' && taskItemDescriptionTextarea.value == ''){
+					taskItemTitleText.classList.add('input-error')
+					taskItemDescriptionTextarea.classList.add('input-error')
+				} else if (taskItemTitleText.value == ''){
+					taskItemTitleText.classList.add('input-error')
+				} else if (taskItemDescriptionTextarea.value == ''){
+					taskItemDescriptionTextarea.classList.add('input-error')
+				} 
 			})
 		}
 
@@ -401,7 +420,7 @@ function handleAlertModal() {
 
 function taskForm() {
 
-	const taskItem = createDiv('task-item')
+	const taskItem = createDiv('task-item task-form')
 	taskItem.className += ' tasksCreated-color'
 	tasksBoardContentCreated.appendChild(taskItem)
 
@@ -430,23 +449,34 @@ function taskForm() {
 	const taskItemButtons = createDiv('task-item__buttons-container')
 	taskItemFooter.append(taskItemButtons)
 
-	const taskItemCancelButton = createInput('button task-item__button', 'button', 'Cancel')
-	const taskItemConfirmButton = createInput('button task-item__button', 'submit', 'Confirm')
+	const taskItemCancelButton = createInput('button button__cancel task-item__button', 'button', 'Cancel')
+	const taskItemConfirmButton = createInput('button button__confirm task-item__button', 'submit', 'Confirm')
 	taskItemButtons.append(taskItemCancelButton, taskItemConfirmButton)
 
 	taskItemCancelButton.addEventListener('click', () => taskItem.remove())
 
 	taskItemConfirmButton.addEventListener('click', () => {
-		taskData = {
-			id: new Date(),
-			title: taskItemTitleText.value,
-			description: taskItemDescriptionTextarea.value,
-			date: new Date().toLocaleDateString(),
-			user: taskItemSelectUser.value,
-		}
-		createdTasksDataArray.push(taskData)
-		tasksBoardContentCreated.innerHTML = null
-		generateTodo(createdTasksDataArray)
+		taskItemTitleText.classList.remove('input-error')
+		taskItemDescriptionTextarea.classList.remove('input-error')
+		if(taskItemTitleText.value != '' && taskItemDescriptionTextarea.value != ''){
+			taskData = {
+				id: new Date(),
+				title: taskItemTitleText.value,
+				description: taskItemDescriptionTextarea.value,
+				date: new Date().toLocaleDateString(),
+				user: taskItemSelectUser.value,
+			}
+			createdTasksDataArray.push(taskData)
+			tasksBoardContentCreated.innerHTML = null
+			generateTodo(createdTasksDataArray)
+		} else if (taskItemTitleText.value == '' && taskItemDescriptionTextarea.value == ''){
+			taskItemTitleText.classList.add('input-error')
+			taskItemDescriptionTextarea.classList.add('input-error')
+		} else if (taskItemTitleText.value == ''){
+			taskItemTitleText.classList.add('input-error')
+		} else if (taskItemDescriptionTextarea.value == ''){
+			taskItemDescriptionTextarea.classList.add('input-error')
+		} 
 
 	})
 	// return taskData
