@@ -44,6 +44,7 @@ body {
 
 		@media (max-width: 824px) {
 			min-height: 100px;
+			flex-direction: column;
 		}
 	}
 
@@ -118,7 +119,11 @@ body {
 			grid-template-columns: 1fr;
 			grid-template-rows: 1fr 1fr 1fr;
 		}
-	}
+		@media (max-width: 400px) {
+			display: flex;
+			overflow: scroll;
+		}
+ 	}
 
 }
 
@@ -199,6 +204,9 @@ body {
 	&__deleteAllTasksButton {
 		background-color: #fff2f6;
 		color: #ff76a1;
+	}
+	@media (max-width: 400px) {
+		min-width: 340px;
 	}
 }
 
