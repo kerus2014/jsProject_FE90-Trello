@@ -256,9 +256,6 @@ body {
 		border: 0px solid;
 		margin-bottom: 16px;
 		cursor: pointer;
-		&:focus{
-			border-color: green;
-		}
 	}
 
 	&__textarea {
@@ -268,10 +265,6 @@ body {
 		border-radius: 4px;
 		padding: 5px 8px;
 		max-height: 400px;
-
-		&:focus{
-			border-color: green;
-		}
 	}
 
 

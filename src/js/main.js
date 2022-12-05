@@ -398,8 +398,9 @@ function generateTodo(array) {
 
 function handleAlertModal() {
 	const alertModalWindow = createDiv('modal-window')
+	document.body.classList.add('body-noScroll')
 
-	const alertModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+	const alertModalContainer = createDiv('task-item modal-window__task-item')
 
 	const alertModalText = document.createElement('p')
 	alertModalText.className = 'task-item__text'
@@ -415,6 +416,7 @@ function handleAlertModal() {
 	alertModalButtonConfirm.addEventListener('click', () => {
 		alertModalContainer.remove()
 		alertModalWindow.remove()
+		document.body.classList.remove('body-noScroll')
 	})
 }
 
@@ -485,11 +487,11 @@ function taskForm() {
 addTaskButton.addEventListener('click', taskForm)
 
 function handleDeleteAllCards() {
-
+	document.body.classList.add('body-noScroll')
 	if (doneTasksDataArray.length == 0) return
 	const deleteModalWindow = createDiv('modal-window')
 
-	const deleteModalContainer = createDiv('task-item modal-window__task-item tasksCreated-color')
+	const deleteModalContainer = createDiv('task-item modal-window__task-item')
 
 	const deleteModalText = document.createElement('p')
 	deleteModalText.className = 'task-item__text'
@@ -509,11 +511,13 @@ function handleDeleteAllCards() {
 		generateTodo(doneTasksDataArray)
 		deleteModalWindow.remove()
 		deleteModalContainer.remove()
+		document.body.classList.remove('body-noScroll')
 	})
 
 	deleteModalButtonCancel.addEventListener('click', () => {
 		deleteModalWindow.remove()
 		deleteModalContainer.remove()
+		document.body.classList.remove('body-noScroll')
 	})
 }
 
