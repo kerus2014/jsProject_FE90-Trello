@@ -116,7 +116,7 @@ function taskForm() {
 		taskItemTitleText.classList.remove('input-error')
 		taskItemDescriptionTextarea.classList.remove('input-error')
 		if(taskItemTitleText.value != '' && taskItemDescriptionTextarea.value != ''){
-			taskData = {
+			let taskData = {
 				id: new Date(),
 				title: taskItemTitleText.value,
 				description: taskItemDescriptionTextarea.value,
@@ -458,10 +458,21 @@ setInterval(() => {
 addTaskButton.addEventListener('click', taskForm)
 deleteTasksButton.addEventListener('click', handleDeleteAllCards)
 
-//localStorage
-// window.addEventListener('beforeunload', function () {
-// 	localStorage.setItem('task', JSON.stringify(createdTasksDataArray))
-// })
+
+window.addEventListener('beforeunload', function () {
+	localStorage.setItem('created', JSON.stringify(createdTasksDataArray))
+	localStorage.setItem('inProgress', JSON.stringify(inProgressTasksDataArray))
+	localStorage.setItem('done', JSON.stringify(doneTasksDataArray))
+})
+
+window.addEventListener('load', function(){
+	createdTasksDataArray = JSON.parse(localStorage.getItem('created'))
+	inProgressTasksDataArray = JSON.parse(localStorage.getItem('inProgress'))
+	doneTasksDataArray = JSON.parse(localStorage.getItem('done'))
+	generateTodo(createdTasksDataArray)
+	generateTodo(inProgressTasksDataArray)
+	generateTodo(doneTasksDataArray)
+})
 
 
 
