@@ -1,6 +1,5 @@
 import { createDiv, createButton, createInput } from "./createElements"
 import {clockFun} from "./clock"
-import { getAndAppendUsersData } from "./getAndAppendUsersData"
 
 let createdTasksDataArray = []
 let inProgressTasksDataArray = []
@@ -16,7 +15,19 @@ const allUsers = createDiv('header__all-users')
 const buttonAddUser = createButton('header__add-user button', '+ Add participant') 
 headerLeftContent.append(headerTitle, allUsers)
 allUsers.append(buttonAddUser)
-getAndAppendUsersData(allUsers, usersArray)
+
+fetch("https://638cd7acd2fc4a058a618bc5.mockapi.io/users")
+	.then(response => response.json())
+	.then(response => {
+	usersArray = response
+	usersArray.forEach(el => {
+		const user = createDiv('header__user')
+		user.style.background = `url(${el.avatar})`
+		allUsers.prepend(user)
+		})
+	})
+
+// getAndAppendUsersData(allUsers, usersArray)
 const headerClock = createDiv('header__clock')
 headerClock.id = 'clock'
 setInterval(clockFun, 1000);

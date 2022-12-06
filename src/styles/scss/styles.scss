@@ -2,6 +2,19 @@
 @import './components/mixin.scss';
 @import './components/variables.scss';
 
+// ::-webkit-scrollbar-thumb{
+// 	opacity: 0.5;
+// }
+
+// ::-webkit-scrollbar-button:horizontal:start:decrement {
+// 	display: none;
+// }
+
+// ::-webkit-scrollbar-button:horizontal:end:increment {
+// 	display: none;
+// }
+
+
 * {
 	margin: 0;
 	padding: 0;
@@ -11,6 +24,7 @@
 body {
 	background: $backgroundColor;
 	@include font;
+	max-height:100vh;
 }
 
 .body-noScroll{
@@ -28,7 +42,6 @@ body {
 
 .header {
 	padding: 20px;
-
 	&__container {
 		// box-shadow: 0px 8px 24px rgba(129, 135, 189, 0.02);
 		padding-top: 16px;
@@ -40,21 +53,14 @@ body {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-
-		@media (max-width: 824px) {
-			min-height: 100px;
-			flex-direction: column;
-		}
 	}
 
 	&__title {
 		@include Font-bold;
 		color: $fontsColor;
 		font-size: 28px;
-
-		@media (max-width: 824px) {
-			font-size: 35px;
-			margin-left: 50px;
+		@media (max-width:480px) {
+			font-size: 24px;
 		}
 	}
 
@@ -64,6 +70,8 @@ body {
 		align-items: center;
 		// width: calc(fit-content - 10px);
 	}
+
+
 
 	&__user{
 		width: 40px;
@@ -91,44 +99,49 @@ body {
 			padding: 10px 20px;
 			border-radius: 8px;
 			font-weight: 700;
+			@media (max-width:500px) {
+				display: none;
+			}
 	}
 
 	&__clock {
 		@include Font-bold();
 		font-size: 18px;
-
-		@media (max-width: 824px) {
-			font-size: 30px;
-			margin-left: 50px;
+		@media (max-width:400px) {
+			display: none;
 		}
 	}
 }
 
+main{
+	overflow-x: auto;
+	// min-height: calc(100vh - 156px);
+	// &::-webkit-scrollbar { /* webkit */
+	// 	width: 0;
+	// 	height: 0;
+	// }
+
+	// &::-webkit-scrollbar{
+	// 	width: 10px;
+	// }
+	
+}
 
 .tasks {
-
+	width: 100%;
 	&__container {
 		padding-top: 20px;
 		padding-bottom: 20px;
 		display: grid;
 		grid-template-columns: 1fr 1fr 1fr;
 		grid-gap: 20px;
-
-		@media (max-width: 824px) {
-			grid-template-columns: 1fr;
-			grid-template-rows: 1fr 1fr 1fr;
-		}
-		@media (max-width: 400px) {
-			display: flex;
-			overflow: scroll;
-		}
  	}
 
 }
 
 .tasks-board {
 	@include styleForms();
-	overflow: visible;
+	min-width: 260px;
 	&__created {}
 
 	&__inProgress {}
@@ -203,9 +216,6 @@ body {
 	&__deleteAllTasksButton {
 		background-color: #fff2f6;
 		color: #ff76a1;
-	}
-	@media (max-width: 400px) {
-		min-width: 340px;
 	}
 }
 
@@ -367,7 +377,8 @@ body {
 
 		&_inMore{
 			width: 100px;
-			height: 0px;
+			height: fit-content;
+			display: none;
 			// padding: 8px;
 			border-radius: 8px;
 			border-top-right-radius: 0px;
@@ -491,10 +502,10 @@ body {
 }
 
 .show{
-	height: fit-content;
-	transition: all 0.5s;
+	display: flex;
 }
 
 .input-error{
 	border: 2px solid rgb(247, 105, 105);
 }
+
