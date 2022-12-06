@@ -1,7 +1,6 @@
 @import './components/fonts.scss';
 @import './components/mixin.scss';
 @import './components/variables.scss';
-@import './modalWin.scss';
 
 * {
 	margin: 0;
@@ -211,7 +210,7 @@ body {
 	overflow: hidden;
 	border-radius: 8px;
 	height: fit-content;
-	cursor: all-scroll;
+	cursor: pointer;
 
 	&__mask{
 		position: absolute;
